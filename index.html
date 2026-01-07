@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>NetMarket OS - TITAN V8 Hybrid</title>
+  <title>NetMarket OS - TITAN V8 Hybrid (Workflow Suite)</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,115 +17,154 @@
       --success:#51cf66; --danger:#ff6b6b; --info:#4dabf7; --warn:#ffd43b;
       --font-ui:'Inter',sans-serif; --font-code:'JetBrains Mono',monospace;
       --shadow: 0 10px 30px rgba(0,0,0,.35);
+      --node-bg:#151a20;
+      --node-stroke:#2b3138;
+      --node-text:#d6dde6;
+      --grid: rgba(255,255,255,.05);
     }
     *{box-sizing:border-box;margin:0;padding:0}
     body{background:var(--bg-deep);color:var(--text-main);font-family:var(--font-ui);height:100vh;display:flex;overflow:hidden}
 
     /* LAYOUT */
-    .sidebar{width:260px;background:var(--bg-sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:10;padding:10px}
+    .sidebar{width:270px;background:var(--bg-sidebar);border-right:1px solid var(--border);display:flex;flex-direction:column;z-index:10;padding:10px}
     .main-wrapper{flex:1;display:flex;flex-direction:column;position:relative;overflow:hidden}
-    .top-bar{height:60px;border-bottom:1px solid var(--border);background:var(--bg-sidebar);display:flex;align-items:center;justify-content:space-between;padding:0 25px}
-    .content-area{flex:1;overflow-y:auto;padding:28px}
+    .top-bar{height:60px;border-bottom:1px solid var(--border);background:var(--bg-sidebar);display:flex;align-items:center;justify-content:space-between;padding:0 22px}
+    .content-area{flex:1;overflow-y:auto;padding:26px}
 
     /* COMPONENTS */
-    .brand{padding:15px;font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:14px}
+    .brand{padding:15px;font-family:'Playfair Display',serif;font-size:1.4rem;color:#fff;display:flex;align-items:center;gap:10px;margin-bottom:10px}
     .brand i{color:var(--primary)}
     .nav-label{font-size:.7rem;text-transform:uppercase;color:var(--text-muted);font-weight:700;margin:15px 0 6px 10px}
-    .nav-item{padding:10px 15px;border-radius:6px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:.9rem;color:var(--text-muted);margin-bottom:2px;transition:.2s}
+    .nav-item{padding:10px 15px;border-radius:8px;cursor:pointer;display:flex;align-items:center;gap:12px;font-size:.92rem;color:var(--text-muted);margin-bottom:4px;transition:.2s}
     .nav-item:hover,.nav-item.active{background:var(--primary-dim);color:var(--primary);border-left:3px solid var(--primary)}
-    .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:18px;margin-bottom:18px}
-    .card{background:var(--bg-panel);border:1px solid var(--border);border-radius:10px;padding:18px;position:relative;box-shadow:var(--shadow)}
+    .grid-4{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px;margin-bottom:16px}
+    .card{background:var(--bg-panel);border:1px solid var(--border);border-radius:12px;padding:16px;position:relative;box-shadow:var(--shadow)}
     .card h3{margin-bottom:12px}
-    .stat-val{font-size:2rem;font-weight:700;color:#fff;font-family:var(--font-code);margin:10px 0}
+    .stat-val{font-size:2rem;font-weight:800;color:#fff;font-family:var(--font-code);margin:10px 0}
     .muted{color:var(--text-muted)}
+    .mono{font-family:var(--font-code)}
     .pill{display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:999px;border:1px solid var(--border);font-size:.78rem;color:#cbd5e1;background:#0f1216}
     .pill.ok{border-color:rgba(81,207,102,.35);color:var(--success)}
     .pill.bad{border-color:rgba(255,107,107,.35);color:var(--danger)}
     .pill.info{border-color:rgba(77,171,247,.35);color:var(--info)}
     .pill.warn{border-color:rgba(255,212,59,.35);color:var(--warn)}
-
-    .btn{background:var(--primary);color:#000;border:none;padding:9px 14px;border-radius:7px;cursor:pointer;font-weight:700;display:inline-flex;align-items:center;gap:8px}
+    .btn{background:var(--primary);color:#000;border:none;padding:9px 14px;border-radius:9px;cursor:pointer;font-weight:800;display:inline-flex;align-items:center;gap:8px}
     .btn:hover{background:#fff}
-    .btn.secondary{background:transparent;color:var(--text-main);border:1px solid var(--border);font-weight:600}
+    .btn.secondary{background:transparent;color:var(--text-main);border:1px solid var(--border);font-weight:650}
     .btn.secondary:hover{border-color:rgba(212,175,55,.5);color:var(--primary)}
     .btn:disabled{opacity:.55;cursor:not-allowed}
-
-    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+    .toolbar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:12px}
     .toolbar-left{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
     .toolbar-right{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-
-    .input{
+    .input,.select{
       background:#0f1216;border:1px solid var(--border);color:var(--text-main);
-      padding:9px 10px;border-radius:8px;outline:none;min-width:240px
+      padding:9px 10px;border-radius:10px;outline:none
     }
-    .select{
-      background:#0f1216;border:1px solid var(--border);color:var(--text-main);
-      padding:9px 10px;border-radius:8px;outline:none
-    }
-    .kpi-badge{position:absolute;top:14px;right:14px}
-    .split{display:grid;grid-template-columns: 1.2fr .8fr;gap:18px}
-    @media(max-width:980px){.split{grid-template-columns:1fr}}
+    .input{min-width:240px}
+    .hr{height:1px;background:var(--border);margin:14px 0}
 
     /* TABLE */
     .data-table{width:100%;border-collapse:collapse;margin-top:8px}
     .data-table th{text-align:left;padding:10px;color:var(--text-muted);border-bottom:1px solid var(--border);font-size:.78rem}
     .data-table td{padding:10px;border-bottom:1px solid #333;color:#d1d5db;font-size:.88rem}
-    .tag{font-family:var(--font-code);font-size:.78rem;color:#cbd5e1}
     .td-right{text-align:right}
-    .row-actions{display:flex;gap:10px;justify-content:flex-end}
-    .icon-btn{background:transparent;border:1px solid var(--border);color:#cbd5e1;border-radius:8px;padding:7px 9px;cursor:pointer}
-    .icon-btn:hover{border-color:rgba(212,175,55,.5);color:var(--primary)}
-    .empty{padding:18px;color:#777;text-align:center;border:1px dashed #2c3036;border-radius:10px;background:#0f1216}
+    .empty{padding:18px;color:#777;text-align:center;border:1px dashed #2c3036;border-radius:12px;background:#0f1216}
+
+    /* VIEW SECTIONS */
+    .view-section{display:none;animation:fadeIn .28s}
+    .view-section.active{display:block}
+    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 
     /* TOASTS */
-    .toasts{position:fixed;bottom:18px;right:18px;z-index:5000;display:flex;flex-direction:column;gap:10px}
+    .toasts{position:fixed;bottom:16px;right:16px;z-index:5000;display:flex;flex-direction:column;gap:10px}
     .toast{
-      width:min(420px, calc(100vw - 36px));
+      width:min(440px, calc(100vw - 32px));
       background:#0f1216;border:1px solid var(--border);border-left:4px solid var(--info);
-      border-radius:10px;padding:12px 12px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:flex-start
+      border-radius:12px;padding:12px 12px;box-shadow:var(--shadow);display:flex;gap:10px;align-items:flex-start
     }
     .toast.ok{border-left-color:var(--success)}
     .toast.bad{border-left-color:var(--danger)}
     .toast.warn{border-left-color:var(--warn)}
-    .toast .t-title{font-weight:700;margin-bottom:2px}
+    .toast .t-title{font-weight:900;margin-bottom:2px}
     .toast .t-msg{color:#cbd5e1;font-size:.9rem}
     .toast .t-close{margin-left:auto;background:transparent;border:none;color:#cbd5e1;cursor:pointer;font-size:1.1rem}
     .toast .t-close:hover{color:#fff}
 
-    /* MODAL SIM */
-    .sim-overlay{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:2000;display:none;justify-content:center;align-items:center;backdrop-filter:blur(5px)}
-    .sim-overlay.active{display:flex}
-    .sim-box{width:92vw;height:86vh;background:#0f0f0f;border:1px solid var(--border);border-radius:12px;display:flex;flex-direction:column;box-shadow:0 0 50px rgba(0,0,0,.5);overflow:hidden}
-    .sim-header{height:60px;background:#161b22;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;padding:0 20px}
-    .sim-body{flex:1;display:flex;overflow:hidden}
-    .sim-stage{flex:3;background:#0b0c10;position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;border-right:1px solid var(--border);overflow:hidden;padding:20px}
-    .sim-terminal{flex:2;background:#050505;padding:18px;font-family:var(--font-code);font-size:.83rem;color:#33ff00;overflow-y:auto;border-left:1px solid #333;display:flex;flex-direction:column}
-    .term-line{margin-bottom:6px;opacity:0;animation:slideIn .2s forwards;display:flex;gap:10px;align-items:flex-start}
+    /* WORKFLOW CANVAS (n8n-like) */
+    .wf-wrap{display:grid;grid-template-columns: 1.35fr .65fr;gap:16px}
+    @media(max-width:1050px){.wf-wrap{grid-template-columns:1fr}}
+    .wf-canvas{
+      position:relative;height:560px;border-radius:14px;border:1px solid var(--border);
+      background:
+        linear-gradient(var(--grid) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+        #0f1216;
+      background-size: 26px 26px;
+      overflow:hidden;
+      box-shadow:var(--shadow);
+    }
+    .wf-svg{position:absolute;inset:0;pointer-events:none}
+    .wf-nodes{position:absolute;inset:0}
+    .node{
+      position:absolute;min-width:170px;max-width:220px;
+      background:var(--node-bg);
+      border:1px solid var(--node-stroke);
+      border-radius:12px;
+      padding:10px 10px;
+      display:flex;gap:10px;align-items:flex-start;
+      box-shadow: 0 8px 20px rgba(0,0,0,.35);
+      cursor:grab;
+      user-select:none;
+      transition:.18s;
+    }
+    .node .ic{
+      width:34px;height:34px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+      background:#0f1216;border:1px solid #2a2f35;color:#cbd5e1;
+      flex:0 0 34px;
+    }
+    .node .t{
+      display:flex;flex-direction:column;gap:2px;
+      color:var(--node-text);
+      min-width:0;
+    }
+    .node .t .title{font-weight:900;font-size:.88rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .node .t .sub{font-size:.76rem;color:#9aa3ad;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .node .badge{
+      margin-left:auto;
+      font-size:.72rem;
+      padding:4px 8px;border-radius:999px;border:1px solid #2a2f35;color:#cbd5e1;background:#0f1216;
+      align-self:flex-start;
+    }
+    .node.active{transform:scale(1.02);border-color:rgba(212,175,55,.7);box-shadow: 0 0 0 2px rgba(212,175,55,.25), 0 10px 26px rgba(0,0,0,.45)}
+    .node.ok{border-color:rgba(81,207,102,.55)}
+    .node.warn{border-color:rgba(255,212,59,.55)}
+    .node.fail{border-color:rgba(255,107,107,.65)}
+    .node .badge.ok{color:var(--success);border-color:rgba(81,207,102,.35)}
+    .node .badge.warn{color:var(--warn);border-color:rgba(255,212,59,.35)}
+    .node .badge.fail{color:var(--danger);border-color:rgba(255,107,107,.35)}
+    .node .badge.idle{color:#9aa3ad}
+
+    .wf-panel{display:flex;flex-direction:column;gap:14px}
+    .wf-panel .card{height:100%}
+    .wf-mini{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .wf-mini .mini{
+      background:#0f1216;border:1px solid var(--border);border-radius:12px;padding:12px;
+    }
+    .wf-mini .mini .k{color:#9aa3ad;font-size:.78rem}
+    .wf-mini .mini .v{margin-top:6px;color:#fff;font-weight:900;font-family:var(--font-code);font-size:1.1rem}
+
+    .wf-term{
+      background:#050505;border:1px solid #222;border-radius:12px;padding:12px;height:210px;overflow:auto;
+      font-family:var(--font-code);font-size:.82rem;color:#33ff00;
+    }
+    .term-line{margin-bottom:6px;opacity:0;animation:slideIn .18s forwards;display:flex;gap:10px}
     .term-time{color:#555;white-space:nowrap}
     .term-text{color:#ddd}
-    .term-highlight{color:var(--primary)}
     @keyframes slideIn{from{transform:translateX(10px);opacity:0}to{transform:translateX(0);opacity:1}}
-    @keyframes fadeIn{from{opacity:0}to{opacity:1}}
-    @keyframes pulse{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}
 
-    .stage-container{text-align:center;animation:fadeIn .45s;width:100%;max-width:560px}
-    .visual-icon{font-size:4rem;margin-bottom:14px;color:var(--text-muted);transition:.5s}
-    .visual-icon.active{color:var(--primary);transform:scale(1.15);text-shadow:0 0 20px var(--primary)}
-    .visual-card{background:#1f242c;padding:18px;border-radius:10px;border:1px solid #333;text-align:left;margin:0 auto;position:relative;box-shadow:0 10px 30px rgba(0,0,0,.5);transition:.5s}
-    .visual-card.approved{border-color:var(--success);box-shadow:0 0 20px rgba(81,207,102,.2)}
-    .visual-card.alert{border-color:var(--danger);box-shadow:0 0 20px rgba(255,107,107,.2)}
-    .progress-bar{width:100%;height:6px;background:#333;border-radius:3px;margin-top:14px;overflow:hidden}
-    .progress-fill{height:100%;background:var(--info);width:0%;transition:width 1s}
-    .float-badge{position:absolute;top:-10px;right:-10px;background:var(--success);color:#000;padding:5px 10px;border-radius:20px;font-weight:800;font-size:.8rem;opacity:0;transform:translateY(10px);transition:.3s}
-    .float-badge.show{opacity:1;transform:translateY(0)}
-
-    /* SECTIONS */
-    .view-section{display:none;animation:fadeIn .35s}
-    .view-section.active{display:block}
-
-    /* small helper */
-    .mono{font-family:var(--font-code)}
-    .hr{height:1px;background:var(--border);margin:14px 0}
+    /* LOGS + AUDIT */
+    .split{display:grid;grid-template-columns: 1.15fr .85fr;gap:16px}
+    @media(max-width:1050px){.split{grid-template-columns:1fr}}
   </style>
 </head>
 
@@ -133,7 +172,7 @@
   <aside class="sidebar">
     <div class="brand">
       <i class="fas fa-cube"></i> NetMarket
-      <span style="font-size:0.6rem;border:1px solid var(--primary);padding:2px 6px;border-radius:6px;margin-left:5px;">V8</span>
+      <span style="font-size:.62rem;border:1px solid var(--primary);padding:2px 6px;border-radius:8px;margin-left:5px;">TITAN V8</span>
     </div>
 
     <div class="nav-label">Général</div>
@@ -142,7 +181,7 @@
     <div class="nav-label">Outils Métiers</div>
     <div class="nav-item" onclick="nav('design', this)"><i class="fas fa-pencil-ruler"></i> NetDesignX</div>
     <div class="nav-item" onclick="nav('cat', this)"><i class="fas fa-tags"></i> NetCatX</div>
-    <div class="nav-item" onclick="nav('promo', this)"><i class="fas fa-bullhorn"></i> NetPromoX</div>
+    <div class="nav-item" onclick="nav('promo', this)"><i class="fas fa-bullhorn"></i> NetMarkX</div>
     <div class="nav-item" onclick="nav('care', this)"><i class="fas fa-headset"></i> NetCareX</div>
 
     <div class="nav-label">Ops</div>
@@ -151,16 +190,16 @@
     <div style="margin-top:auto;font-size:.78rem;color:#555;padding:10px;">
       System Status: <span style="color:var(--success)">● Online</span><br>
       Server: AWS-Paris-1<br>
-      Build: <span class="mono">titan-v8.3.2</span>
+      Build: <span class="mono">titan-v8.workflow-suite</span>
     </div>
   </aside>
 
   <div class="main-wrapper">
     <header class="top-bar">
-      <div style="font-weight:700" id="pageTitle">Dashboard</div>
+      <div style="font-weight:900" id="pageTitle">Dashboard</div>
       <div style="display:flex;align-items:center;gap:10px;">
         <span style="font-size:.85rem;color:var(--text-muted);" id="clock">--:--:--</span>
-        <span class="pill info"><i class="fas fa-bolt"></i> Mode Démo</span>
+        <span class="pill info"><i class="fas fa-bolt"></i> Démo (n8n-like)</span>
         <span style="font-size:.85rem;color:var(--text-muted);">Admin User</span>
         <div style="width:30px;height:30px;background:var(--primary);border-radius:50%;display:flex;align-items:center;justify-content:center;color:#000;font-weight:900;">A</div>
       </div>
@@ -185,26 +224,22 @@
 
         <div class="grid-4">
           <div class="card">
-            <div class="kpi-badge pill info"><i class="fas fa-chart-simple"></i> KPI</div>
-            <div class="muted" style="font-size:.9rem;">Chiffre d'Affaires</div>
+            <div class="muted">Chiffre d'Affaires</div>
             <div class="stat-val" id="kpiCA">11.1 Mds</div>
             <div style="color:var(--success);font-size:.82rem;">▲ +7% Annuel</div>
           </div>
           <div class="card">
-            <div class="kpi-badge pill info"><i class="fas fa-user-group"></i> Live</div>
-            <div class="muted" style="font-size:.9rem;">Visiteurs Actifs</div>
+            <div class="muted">Visiteurs Actifs</div>
             <div class="stat-val" id="kpiVisitors">45,200</div>
             <div style="color:var(--success);font-size:.82rem;">▲ +12% vs Hier</div>
           </div>
           <div class="card">
-            <div class="kpi-badge pill info"><i class="fas fa-bag-shopping"></i> Ops</div>
-            <div class="muted" style="font-size:.9rem;">Commandes / Jour</div>
+            <div class="muted">Commandes / Jour</div>
             <div class="stat-val" id="kpiOrders">8,450</div>
             <div style="color:var(--info);font-size:.82rem;">● Stable</div>
           </div>
           <div class="card">
-            <div class="kpi-badge pill warn"><i class="fas fa-rotate-left"></i> Qualité</div>
-            <div class="muted" style="font-size:.9rem;">Taux Retour</div>
+            <div class="muted">Taux Retour</div>
             <div class="stat-val" id="kpiReturns">14%</div>
             <div style="color:var(--danger);font-size:.82rem;">▼ -2% (Objectif)</div>
           </div>
@@ -223,7 +258,7 @@
                   <option value="ALL">Tous modules</option>
                   <option value="NetDesignX">NetDesignX</option>
                   <option value="NetCatX">NetCatX</option>
-                  <option value="NetPromoX">NetPromoX</option>
+                  <option value="NetMarkX">NetMarkX</option>
                   <option value="NetCareX">NetCareX</option>
                   <option value="OPS">OPS</option>
                 </select>
@@ -232,96 +267,142 @@
 
             <table class="data-table">
               <thead>
-                <tr>
-                  <th>Horodatage</th><th>Module</th><th>Action</th><th>Détail</th><th class="td-right">Statut</th>
-                </tr>
+                <tr><th>Horodatage</th><th>Module</th><th>Action</th><th>Détail</th><th class="td-right">Statut</th></tr>
               </thead>
               <tbody id="logsBody"></tbody>
             </table>
           </div>
 
           <div class="card">
-            <h3>KPIs Opérationnels</h3>
+            <h3>KPIs Inter-Départements</h3>
             <div class="hr"></div>
             <div style="display:grid;gap:12px;">
-              <div>
-                <div class="muted">Temps de cycle moyen</div>
-                <div class="mono" style="font-size:1.3rem;font-weight:800;color:#fff" id="kpiCycle">—</div>
-              </div>
-              <div>
-                <div class="muted">Taux d'erreur PIM</div>
-                <div class="mono" style="font-size:1.3rem;font-weight:800;color:#fff" id="kpiPimErr">—</div>
-              </div>
-              <div>
-                <div class="muted">SLA Support (24h)</div>
-                <div class="mono" style="font-size:1.3rem;font-weight:800;color:#fff" id="kpiSLA">—</div>
-              </div>
-              <div>
-                <div class="muted">ROI Marketing (7j)</div>
-                <div class="mono" style="font-size:1.3rem;font-weight:800;color:#fff" id="kpiROI">—</div>
-              </div>
+              <div><div class="muted">Time-to-market (Design→Live)</div><div class="mono" style="font-size:1.25rem;font-weight:900;color:#fff" id="kpiTTM">—</div></div>
+              <div><div class="muted">Data Quality PIM (erreurs)</div><div class="mono" style="font-size:1.25rem;font-weight:900;color:#fff" id="kpiDQ">—</div></div>
+              <div><div class="muted">ROI Marketing (7j)</div><div class="mono" style="font-size:1.25rem;font-weight:900;color:#fff" id="kpiROI">—</div></div>
+              <div><div class="muted">SLA Support (24h)</div><div class="mono" style="font-size:1.25rem;font-weight:900;color:#fff" id="kpiSLA">—</div></div>
             </div>
             <div class="hr"></div>
-            <button class="btn" onclick="recalcKPIs()"><i class="fas fa-wand-magic-sparkles"></i> Recalculer KPIs</button>
+            <button class="btn" onclick="recalcEnterpriseKPIs()"><i class="fas fa-wand-magic-sparkles"></i> Recalculer</button>
           </div>
         </div>
       </section>
 
-      <!-- DESIGN -->
+      <!-- NETDESIGNX -->
       <section id="design" class="view-section">
         <div class="toolbar">
           <div class="toolbar-left">
-            <h2 style="margin:0;">NetDesignX <span style="color:#666;font-size:1rem;">| Création</span></h2>
-            <span class="pill info"><i class="fas fa-diagram-project"></i> Workflow</span>
+            <h2 style="margin:0;">NetDesignX <span style="color:#666;font-size:1rem;">| Design & Collection</span></h2>
+            <span class="pill info"><i class="fas fa-diagram-project"></i> Workflow n8n</span>
           </div>
           <div class="toolbar-right">
-            <button class="btn secondary" onclick="toast('info','Brief','Brief produit généré (démo).')"><i class="fas fa-clipboard"></i> Générer Brief</button>
-            <button class="btn" onclick="startSim('design')"><i class="fas fa-play"></i> Simuler Workflow</button>
+            <button class="btn secondary" onclick="loadWorkflow('design')"><i class="fas fa-rotate"></i> Charger workflow</button>
+            <button class="btn" onclick="runWorkflow('design')"><i class="fas fa-play"></i> Exécuter</button>
           </div>
         </div>
 
         <div class="grid-4">
           <div class="card"><div class="muted">Idées</div><div class="stat-val" id="dIdeas">42</div><span class="pill ok">Backlog sain</span></div>
           <div class="card"><div class="muted">Prototypes 3D</div><div class="stat-val" id="dProto">15</div><span class="pill info">CLO3D</span></div>
-          <div class="card"><div class="muted">Temps de validation</div><div class="stat-val" id="dLead">3.2 j</div><span class="pill warn">À optimiser</span></div>
-          <div class="card"><div class="muted">Coût moyen proto</div><div class="stat-val" id="dCost">12.5€</div><span class="pill ok">Sous contrôle</span></div>
+          <div class="card"><div class="muted">Lead time validation</div><div class="stat-val" id="dLead">3.2 j</div><span class="pill warn">À optimiser</span></div>
+          <div class="card"><div class="muted">Taux complétude 1er passage</div><div class="stat-val" id="dFirstPass">81%</div><span class="pill info">Gate “Validation”</span></div>
         </div>
 
-        <div class="card">
-          <div class="toolbar">
-            <div class="toolbar-left">
-              <h3 style="margin:0;">Pipeline Créatif</h3>
-              <span class="pill info"><i class="fas fa-layer-group"></i> Kanban</span>
-            </div>
-            <div class="toolbar-right">
-              <button class="btn secondary" onclick="toast('ok','Sync','Assets synchronisés vers NetCatX.')"><i class="fas fa-cloud-arrow-up"></i> Sync PIM</button>
-            </div>
+        <div class="wf-wrap">
+          <div class="wf-canvas" id="wfCanvasDesign">
+            <svg class="wf-svg" id="wfSvgDesign"></svg>
+            <div class="wf-nodes" id="wfNodesDesign"></div>
           </div>
 
-          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap;">
-            <div style="flex:1;min-width:240px;background:#252a30;padding:15px;border-radius:10px;border:1px solid #2b3036;">
-              <div style="font-weight:900;margin-bottom:10px;color:var(--info);">TO DO</div>
-              <div style="background:#333;padding:10px;margin-bottom:7px;border-radius:8px;">Veste Hiver</div>
-              <div style="background:#333;padding:10px;border-radius:8px;">Robe Soie</div>
-            </div>
-            <div style="flex:1;min-width:240px;background:#252a30;padding:15px;border-radius:10px;border:1px solid #2b3036;">
-              <div style="font-weight:900;margin-bottom:10px;color:var(--primary);">IN PROGRESS</div>
-              <div style="background:#333;padding:10px;border-radius:8px;">Pantalon Cargo (CLO3D)</div>
-            </div>
-            <div style="flex:1;min-width:240px;background:#252a30;padding:15px;border-radius:10px;border:1px solid #2b3036;">
-              <div style="font-weight:900;margin-bottom:10px;color:var(--success);">DONE</div>
-              <div style="background:#333;padding:10px;border-radius:8px;border-left:3px solid var(--success);">Sneakers RunX</div>
+          <div class="wf-panel">
+            <div class="card">
+              <div class="toolbar">
+                <div class="toolbar-left">
+                  <h3 style="margin:0;">Console workflow</h3>
+                  <span class="pill info"><i class="fas fa-terminal"></i> n8n</span>
+                </div>
+                <div class="toolbar-right">
+                  <button class="btn secondary" onclick="wfSpeedToggle()"><i class="fas fa-gauge-high"></i> Vitesse: <span id="wfSpeedLbl">x1</span></button>
+                </div>
+              </div>
+              <div class="wf-mini">
+                <div class="mini">
+                  <div class="k">Cycle time (croquis→Go)</div>
+                  <div class="v" id="dKpiCycle">—</div>
+                </div>
+                <div class="mini">
+                  <div class="k">Taux No-Go</div>
+                  <div class="v" id="dKpiNoGo">—</div>
+                </div>
+                <div class="mini">
+                  <div class="k">Tickets IT</div>
+                  <div class="v" id="dKpiTickets">—</div>
+                </div>
+                <div class="mini">
+                  <div class="k">Handoff vers PIM</div>
+                  <div class="v" id="dKpiHandoff">—</div>
+                </div>
+              </div>
+              <div class="hr"></div>
+              <div class="wf-term" id="wfTermDesign"></div>
             </div>
           </div>
         </div>
       </section>
 
-      <!-- PROMO -->
+      <!-- NETCATX -->
+      <section id="cat" class="view-section">
+        <div class="toolbar">
+          <div class="toolbar-left">
+            <h2 style="margin:0;">NetCatX <span style="color:#666;font-size:1rem;">| Catalogue / E-merchandising</span></h2>
+            <span class="pill info"><i class="fas fa-tags"></i> PIM + Publication</span>
+          </div>
+          <div class="toolbar-right">
+            <button class="btn secondary" onclick="loadWorkflow('cat')"><i class="fas fa-rotate"></i> Charger workflow</button>
+            <button class="btn" onclick="runWorkflow('cat')"><i class="fas fa-play"></i> Exécuter</button>
+          </div>
+        </div>
+
+        <div class="grid-4">
+          <div class="card"><div class="muted">Produits Live</div><div class="stat-val" id="cLive">12,400</div><span class="pill ok">Stable</span></div>
+          <div class="card"><div class="muted">Complétude</div><div class="stat-val" id="cComp">98.7%</div><span class="pill ok">Très bon</span></div>
+          <div class="card"><div class="muted">Time-to-publish</div><div class="stat-val" id="cPub">14 min</div><span class="pill info">Pipeline API</span></div>
+          <div class="card"><div class="muted">Erreurs / 1000 SKU</div><div class="stat-val" id="cErrRate">0.8</div><span class="pill warn">Qualité</span></div>
+        </div>
+
+        <div class="wf-wrap">
+          <div class="wf-canvas" id="wfCanvasCat">
+            <svg class="wf-svg" id="wfSvgCat"></svg>
+            <div class="wf-nodes" id="wfNodesCat"></div>
+          </div>
+
+          <div class="wf-panel">
+            <div class="card">
+              <div class="toolbar">
+                <div class="toolbar-left">
+                  <h3 style="margin:0;">Console workflow</h3>
+                  <span class="pill info"><i class="fas fa-terminal"></i> n8n</span>
+                </div>
+              </div>
+              <div class="wf-mini">
+                <div class="mini"><div class="k">Succès sync (%)</div><div class="v" id="cKpiSync">—</div></div>
+                <div class="mini"><div class="k">Doublons gérés</div><div class="v" id="cKpiDup">—</div></div>
+                <div class="mini"><div class="k">Dead-letter</div><div class="v" id="cKpiDLQ">—</div></div>
+                <div class="mini"><div class="k">Publication</div><div class="v" id="cKpiPublish">—</div></div>
+              </div>
+              <div class="hr"></div>
+              <div class="wf-term" id="wfTermCat"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- NETMARKX (Marketing) -->
       <section id="promo" class="view-section">
         <div class="toolbar">
           <div class="toolbar-left">
-            <h2 style="margin:0;">NetPromoX <span style="color:#666;font-size:1rem;">| Marketing</span></h2>
-            <span class="pill info"><i class="fas fa-bullseye"></i> Campagnes</span>
+            <h2 style="margin:0;">NetMarkX <span style="color:#666;font-size:1rem;">| Marketing & Communication</span></h2>
+            <span class="pill info"><i class="fas fa-bullseye"></i> Automation & ROI</span>
           </div>
           <div class="toolbar-right">
             <select class="select" id="segmentSelect" onchange="updateSegment()">
@@ -329,83 +410,99 @@
               <option value="NEW">Nouveaux clients (30j)</option>
               <option value="CHURN">Risque churn (90j)</option>
             </select>
-            <button class="btn secondary" onclick="toast('info','A/B Test','2 variantes de sujet prêtes (démo).')"><i class="fas fa-flask"></i> A/B Test</button>
-            <button class="btn" onclick="startSim('promo')"><i class="fas fa-play"></i> Simuler Campagne</button>
+            <button class="btn secondary" onclick="loadWorkflow('mark')"><i class="fas fa-rotate"></i> Charger workflow</button>
+            <button class="btn" onclick="runWorkflow('mark')"><i class="fas fa-play"></i> Exécuter</button>
           </div>
         </div>
 
         <div class="grid-4">
-          <div class="card"><div class="muted">Emails Envoyés</div><div class="stat-val" id="pSent">120k</div><span class="pill info">SMTP batch</span></div>
-          <div class="card"><div class="muted">ROI Global</div><div class="stat-val" style="color:var(--success);" id="pROI">5.2x</div><span class="pill ok">Rentable</span></div>
-          <div class="card"><div class="muted">Taux ouverture</div><div class="stat-val" id="pOpen">32%</div><span class="pill ok">Au-dessus médiane</span></div>
-          <div class="card"><div class="muted">Désinscriptions</div><div class="stat-val" id="pUnsub">0.18%</div><span class="pill warn">À surveiller</span></div>
+          <div class="card"><div class="muted">Emails (7j)</div><div class="stat-val" id="mSent">120k</div><span class="pill info">Klaviyo</span></div>
+          <div class="card"><div class="muted">ROI Global</div><div class="stat-val" style="color:var(--success);" id="mROI">5.2x</div><span class="pill ok">Rentable</span></div>
+          <div class="card"><div class="muted">Taux ouverture</div><div class="stat-val" id="mOpen">32%</div><span class="pill ok">Au-dessus médiane</span></div>
+          <div class="card"><div class="muted">Alertes ROI</div><div class="stat-val" id="mAlerts">1</div><span class="pill warn">Seuil</span></div>
         </div>
 
-        <div class="card" style="height:320px;">
+        <div class="card" style="height:320px;margin-bottom:16px;">
           <canvas id="chartPromo"></canvas>
         </div>
-      </section>
 
-      <!-- CAT -->
-      <section id="cat" class="view-section">
-        <div class="toolbar">
-          <div class="toolbar-left">
-            <h2 style="margin:0;">NetCatX <span style="color:#666;font-size:1rem;">| PIM</span></h2>
-            <span class="pill info"><i class="fas fa-tags"></i> Data Quality</span>
+        <div class="wf-wrap">
+          <div class="wf-canvas" id="wfCanvasMark">
+            <svg class="wf-svg" id="wfSvgMark"></svg>
+            <div class="wf-nodes" id="wfNodesMark"></div>
           </div>
-          <div class="toolbar-right">
-            <button class="btn secondary" onclick="toast('info','Import','Import ERP simulé: 150 SKU.')"><i class="fas fa-file-import"></i> Import ERP</button>
-            <button class="btn" onclick="startSim('cat')"><i class="fas fa-play"></i> Simuler Flux</button>
-          </div>
-        </div>
 
-        <div class="grid-4">
-          <div class="card"><div class="muted">Produits Live</div><div class="stat-val" id="cLive">12,400</div><span class="pill ok">Stable</span></div>
-          <div class="card"><div class="muted">Erreurs</div><div class="stat-val" style="color:var(--success);" id="cErr">0</div><span class="pill ok">Zéro défaut</span></div>
-          <div class="card"><div class="muted">Complétude</div><div class="stat-val" id="cComp">98.7%</div><span class="pill ok">Très bon</span></div>
-          <div class="card"><div class="muted">Temps publication</div><div class="stat-val" id="cPub">14 min</div><span class="pill info">Pipeline API</span></div>
-        </div>
-
-        <div class="card">
-          <div class="toolbar">
-            <div class="toolbar-left">
-              <h3 style="margin:0;">Contrôles Qualité (démo)</h3>
-              <span class="pill warn"><i class="fas fa-shield"></i> Règles</span>
-            </div>
-            <div class="toolbar-right">
-              <button class="btn secondary" onclick="runQualityChecks()"><i class="fas fa-play"></i> Exécuter</button>
+          <div class="wf-panel">
+            <div class="card">
+              <div class="toolbar">
+                <div class="toolbar-left">
+                  <h3 style="margin:0;">Console workflow</h3>
+                  <span class="pill info"><i class="fas fa-terminal"></i> n8n</span>
+                </div>
+              </div>
+              <div class="wf-mini">
+                <div class="mini"><div class="k">Conversions</div><div class="v" id="mKpiConv">—</div></div>
+                <div class="mini"><div class="k">CTR</div><div class="v" id="mKpiCTR">—</div></div>
+                <div class="mini"><div class="k">ROAS</div><div class="v" id="mKpiROAS">—</div></div>
+                <div class="mini"><div class="k">Budget pacing</div><div class="v" id="mKpiPacing">—</div></div>
+              </div>
+              <div class="hr"></div>
+              <div class="wf-term" id="wfTermMark"></div>
             </div>
           </div>
-          <div id="qcOut" class="empty">Clique sur “Exécuter” pour lancer les règles (prix, stocks, visuels, SEO).</div>
         </div>
       </section>
 
-      <!-- CARE -->
+      <!-- NETCAREX -->
       <section id="care" class="view-section">
         <div class="toolbar">
           <div class="toolbar-left">
-            <h2 style="margin:0;">NetCareX <span style="color:#666;font-size:1rem;">| Support</span></h2>
-            <span class="pill info"><i class="fas fa-headset"></i> SLA</span>
+            <h2 style="margin:0;">NetCareX <span style="color:#666;font-size:1rem;">| Service Client</span></h2>
+            <span class="pill info"><i class="fas fa-headset"></i> SLA & Retours</span>
           </div>
           <div class="toolbar-right">
-            <button class="btn secondary" onclick="toast('info','Macros','Templates réponses chargés (démo).')"><i class="fas fa-wand-magic"></i> Macros</button>
-            <button class="btn" onclick="startSim('care')"><i class="fas fa-play"></i> Simuler Ticket</button>
+            <button class="btn secondary" onclick="loadWorkflow('care')"><i class="fas fa-rotate"></i> Charger workflow</button>
+            <button class="btn" onclick="runWorkflow('care')"><i class="fas fa-play"></i> Exécuter</button>
           </div>
         </div>
 
         <div class="grid-4">
-          <div class="card"><div class="muted">Tickets Ouverts</div><div class="stat-val" id="sOpen">24</div><span class="pill warn">File active</span></div>
-          <div class="card"><div class="muted">Satisfaction</div><div class="stat-val" style="color:var(--primary);" id="sCSAT">4.8/5</div><span class="pill ok">Top</span></div>
-          <div class="card"><div class="muted">SLA <span class="mono">(24h)</span></div><div class="stat-val" id="sSLA">92%</div><span class="pill warn">À remonter</span></div>
-          <div class="card"><div class="muted">Temps 1ère réponse</div><div class="stat-val" id="sFRT">1h 12m</div><span class="pill ok">Correct</span></div>
+          <div class="card"><div class="muted">Tickets ouverts</div><div class="stat-val" id="sOpen">24</div><span class="pill warn">File active</span></div>
+          <div class="card"><div class="muted">SLA (24h)</div><div class="stat-val" id="sSLA">92%</div><span class="pill warn">À remonter</span></div>
+          <div class="card"><div class="muted">First response</div><div class="stat-val" id="sFRT">1h 12m</div><span class="pill ok">Correct</span></div>
+          <div class="card"><div class="muted">CSAT</div><div class="stat-val" style="color:var(--primary);" id="sCSAT">4.8/5</div><span class="pill ok">Top</span></div>
         </div>
 
-        <div class="card">
+        <div class="wf-wrap">
+          <div class="wf-canvas" id="wfCanvasCare">
+            <svg class="wf-svg" id="wfSvgCare"></svg>
+            <div class="wf-nodes" id="wfNodesCare"></div>
+          </div>
+
+          <div class="wf-panel">
+            <div class="card">
+              <div class="toolbar">
+                <div class="toolbar-left">
+                  <h3 style="margin:0;">Console workflow</h3>
+                  <span class="pill info"><i class="fas fa-terminal"></i> n8n</span>
+                </div>
+              </div>
+              <div class="wf-mini">
+                <div class="mini"><div class="k">TTR (résolution)</div><div class="v" id="sKpiTTR">—</div></div>
+                <div class="mini"><div class="k">SLA breach</div><div class="v" id="sKpiBreach">—</div></div>
+                <div class="mini"><div class="k">Automatisation</div><div class="v" id="sKpiAuto">—</div></div>
+                <div class="mini"><div class="k">RMA générés</div><div class="v" id="sKpiRMA">—</div></div>
+              </div>
+              <div class="hr"></div>
+              <div class="wf-term" id="wfTermCare"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="card" style="margin-top:16px;">
           <h3>File Tickets (démo)</h3>
           <table class="data-table">
-            <thead>
-              <tr><th>ID</th><th>Client</th><th>Motif</th><th>Priorité</th><th class="td-right">Actions</th></tr>
-            </thead>
+            <thead><tr><th>ID</th><th>Client</th><th>Motif</th><th>Priorité</th><th class="td-right">Actions</th></tr></thead>
             <tbody id="ticketsBody"></tbody>
           </table>
         </div>
@@ -426,7 +523,7 @@
 
         <div class="card">
           <h3>Journal d'audit (démo)</h3>
-          <div class="muted" style="margin-bottom:10px;">Qui a fait quoi, quand, et sur quel module (utile pour ton rapport).</div>
+          <div class="muted" style="margin-bottom:10px;">Qui a fait quoi, quand, et sur quel outil. Oui, c’est la partie “adulte responsable”.</div>
           <table class="data-table">
             <thead><tr><th>Date</th><th>Utilisateur</th><th>Module</th><th>Action</th><th>Détail</th><th class="td-right">Niveau</th></tr></thead>
             <tbody id="auditBody"></tbody>
@@ -436,43 +533,16 @@
     </div>
   </div>
 
-  <!-- SIM MODAL -->
-  <div id="simModal" class="sim-overlay">
-    <div class="sim-box">
-      <div class="sim-header">
-        <div style="font-family:var(--font-code);font-size:1.05rem;color:var(--primary);">
-          <i class="fas fa-terminal"></i> SIMULATION: <span id="simTitle">...</span>
-        </div>
-        <button onclick="closeSim()" style="background:none;border:none;color:#fff;font-size:1.6rem;cursor:pointer;">&times;</button>
-      </div>
-      <div class="sim-body">
-        <div class="sim-stage" id="stage">
-          <div style="color:#666;">En attente...</div>
-        </div>
-        <div class="sim-terminal" id="terminal">
-          <div>> System Ready.</div>
-        </div>
-      </div>
-      <div style="padding:16px;background:#111;text-align:center;border-top:1px solid #333;display:flex;gap:10px;justify-content:center;flex-wrap:wrap;">
-        <button class="btn secondary" onclick="toggleSpeed()"><i class="fas fa-gauge-high"></i> Vitesse: <span id="speedLbl">x1</span></button>
-        <button class="btn" id="btnRun" onclick="runSequence()"><i class="fas fa-bolt"></i> EXECUTER SEQUENCE</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- TOASTS -->
   <div class="toasts" id="toasts"></div>
 
   <script>
     /* =========================
        CLOCK
     ========================= */
-    setInterval(()=> {
-      document.getElementById('clock').innerText = new Date().toLocaleTimeString();
-    }, 500);
+    setInterval(()=> document.getElementById('clock').innerText = new Date().toLocaleTimeString(), 500);
 
     /* =========================
-       CHARTS
+       CHART
     ========================= */
     const ctxPromo = document.getElementById('chartPromo').getContext('2d');
     const promoChart = new Chart(ctxPromo, {
@@ -488,24 +558,27 @@
           tension: .35
         }]
       },
-      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { ticks: { color: '#777' } }, x: { ticks: { color: '#777' } } } }
+      options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } },
+        scales:{x:{ticks:{color:'#777'}},y:{ticks:{color:'#777'}}}
+      }
     });
 
     function updateSegment(){
       const seg = document.getElementById('segmentSelect').value;
       if(seg==='VIP'){
-        setText('pSent','120k'); setText('pROI','5.2x'); setText('pOpen','32%'); setText('pUnsub','0.18%');
+        setText('mSent','120k'); setText('mROI','5.2x'); setText('mOpen','32%'); setText('mAlerts','1');
         promoChart.data.datasets[0].data = [1200,1900,3000,5000,4200,6000,7000];
       } else if(seg==='NEW'){
-        setText('pSent','75k'); setText('pROI','3.1x'); setText('pOpen','38%'); setText('pUnsub','0.22%');
+        setText('mSent','75k'); setText('mROI','3.1x'); setText('mOpen','38%'); setText('mAlerts','0');
         promoChart.data.datasets[0].data = [900,1400,2300,3400,3100,4200,4800];
       } else {
-        setText('pSent','40k'); setText('pROI','2.4x'); setText('pOpen','26%'); setText('pUnsub','0.11%');
+        setText('mSent','40k'); setText('mROI','2.4x'); setText('mOpen','26%'); setText('mAlerts','2');
         promoChart.data.datasets[0].data = [700,1100,1700,2100,2400,2600,2800];
       }
       promoChart.update();
       toast('info','Segment',`Segment actif: ${seg}`);
-      audit('Admin','NetPromoX','UPDATE_SEGMENT',`Segment=${seg}`,'INFO');
+      audit('Admin','NetMarkX','UPDATE_SEGMENT',`Segment=${seg}`,'INFO');
+      pushLog('NetMarkX','Segment',`Set=${seg}`,'OK');
     }
 
     /* =========================
@@ -518,19 +591,21 @@
       el.classList.add('active');
       document.getElementById('pageTitle').innerText = id.charAt(0).toUpperCase() + id.slice(1);
 
-      audit('Admin', id==='ops'?'OPS':(
-        id==='dashboard'?'OPS':
-        id==='design'?'NetDesignX':
-        id==='cat'?'NetCatX':
-        id==='promo'?'NetPromoX':
-        id==='care'?'NetCareX':'OPS'
-      ), 'NAVIGATE', `to=${id}`, 'INFO');
+      const mod = id==='design'?'NetDesignX':id==='cat'?'NetCatX':id==='promo'?'NetMarkX':id==='care'?'NetCareX':id==='ops'?'OPS':'OPS';
+      audit('Admin', mod, 'NAVIGATE', `to=${id}`, 'INFO');
+      pushLog(mod,'Navigate',`to=${id}`,'OK');
+
+      // Auto-load workflow once, for illustration
+      if(id==='design') loadWorkflow('design');
+      if(id==='cat') loadWorkflow('cat');
+      if(id==='promo') loadWorkflow('mark');
+      if(id==='care') loadWorkflow('care');
     }
 
     /* =========================
        UTIL
     ========================= */
-    function setText(id, v){ document.getElementById(id).innerText = v; }
+    function setText(id, v){ const el=document.getElementById(id); if(el) el.innerText = v; }
     function fmt(n){ return n.toLocaleString('fr-CH'); }
     function rand(a,b){ return Math.floor(Math.random()*(b-a+1))+a; }
     function pick(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
@@ -555,34 +630,33 @@
     }
 
     /* =========================
-       LOGS (enrichis + filtres)
+       LOGS
     ========================= */
+    const logs = [];
     const logsSeed = [
       {mod:'NetCatX', act:'Sync Shopify', det:'150 items', status:'OK'},
-      {mod:'NetPromoX', act:'Email Sent', det:'Segment VIP', status:'OK'},
+      {mod:'NetMarkX', act:'Email Sent', det:'Segment VIP', status:'OK'},
       {mod:'NetCareX', act:'Ticket Closed', det:'Refund #882', status:'OK'},
       {mod:'NetDesignX', act:'3D Render', det:'Veste Hiver', status:'OK'},
       {mod:'OPS', act:'Policy Check', det:'GDPR consent OK', status:'OK'},
       {mod:'NetCatX', act:'Rule Engine', det:'SEO title missing (SKU BST-2025)', status:'WARN'}
     ];
 
-    const logs = [];
     function pushLog(mod, act, det, status='OK'){
-      logs.unshift({ts: new Date(), mod, act, det, status});
-      if(logs.length>60) logs.pop();
+      logs.unshift({ts:new Date(), mod, act, det, status});
+      if(logs.length>80) logs.pop();
       renderLogs();
     }
 
     function renderLogs(){
       const q = (document.getElementById('logSearch').value||'').toLowerCase();
       const f = document.getElementById('logFilter').value;
-
       const rows = logs
         .filter(l => (f==='ALL' || l.mod===f))
         .filter(l => (`${l.mod} ${l.act} ${l.det}`.toLowerCase().includes(q)));
 
       const body = document.getElementById('logsBody');
-      body.innerHTML = rows.slice(0,10).map(l=>{
+      body.innerHTML = rows.slice(0,12).map(l=>{
         const st = l.status==='OK'
           ? `<span class="pill ok">OK</span>`
           : l.status==='WARN'
@@ -590,7 +664,7 @@
             : `<span class="pill bad">FAIL</span>`;
         return `
           <tr>
-            <td class="tag">${l.ts.toLocaleTimeString()}</td>
+            <td class="mono" style="font-size:.78rem;color:#9aa3ad;">${l.ts.toLocaleTimeString()}</td>
             <td><span style="color:var(--primary)">${l.mod}</span></td>
             <td>${l.act}</td>
             <td>${l.det}</td>
@@ -599,25 +673,22 @@
       }).join('');
 
       if(rows.length===0){
-        body.innerHTML = `<tr><td colspan="5"><div class="empty">Aucun résultat (démo calme, pour une fois).</div></td></tr>`;
+        body.innerHTML = `<tr><td colspan="5"><div class="empty">Aucun résultat.</div></td></tr>`;
       }
     }
 
-    // initial logs
     for(let i=0;i<10;i++){
-      const s = pick(logsSeed);
-      pushLog(s.mod, s.act, s.det, s.status);
+      const s=pick(logsSeed);
+      pushLog(s.mod,s.act,s.det,s.status);
     }
-
     setInterval(()=>{
       const s = pick(logsSeed);
-      // petit "live" : modifie un peu les détails
       let det = s.det;
       if(s.mod==='NetCatX' && s.act==='Sync Shopify') det = `${rand(80,260)} items`;
-      if(s.mod==='NetPromoX' && s.act==='Email Sent') det = `Batch ${fmt(rand(10_000, 55_000))}`;
+      if(s.mod==='NetMarkX' && s.act==='Email Sent') det = `Batch ${fmt(rand(10_000, 55_000))}`;
       if(s.mod==='NetCareX' && s.act==='Ticket Closed') det = `Ticket #${rand(800,999)}`;
       pushLog(s.mod, s.act, det, s.status);
-    }, 3200);
+    }, 3600);
 
     function exportLogsCSV(){
       const header = ['timestamp','module','action','detail','status'];
@@ -644,151 +715,33 @@
     }
 
     /* =========================
-       KPI ENGINE (démo)
-    ========================= */
-    function recalcKPIs(){
-      // Petits modèles plausibles (démo) : on calcule à partir de quelques variables.
-      const cycleMin = rand(8, 22);               // min
-      const pimErr = (Math.random()*0.35).toFixed(2); // %
-      const sla = rand(88, 97);                   // %
-      const roi = (2 + Math.random()*4).toFixed(1);   // x
-
-      setText('kpiCycle', `${cycleMin} min`);
-      setText('kpiPimErr', `${pimErr}%`);
-      setText('kpiSLA', `${sla}%`);
-      setText('kpiROI', `${roi}x`);
-
-      toast('info','KPIs','KPIs recalculés (démo).');
-      audit('Admin','OPS','KPI_RECALC',`cycle=${cycleMin}min, pimErr=${pimErr}%, sla=${sla}%, roi=${roi}x`,'INFO');
-    }
-    recalcKPIs();
-
-    /* =========================
-       TICKETS (Support)
-    ========================= */
-    const tickets = [
-      {id:'#1042', client:'Julie M.', motif:'Retour - taille', prio:'Haute'},
-      {id:'#1043', client:'Karim S.', motif:'Livraison en retard', prio:'Moyenne'},
-      {id:'#1044', client:'Emma R.', motif:'Facturation', prio:'Basse'},
-      {id:'#1045', client:'Noah L.', motif:'Produit défectueux', prio:'Haute'}
-    ];
-    function renderTickets(){
-      const body = document.getElementById('ticketsBody');
-      body.innerHTML = tickets.map(t=>{
-        const p = t.prio==='Haute' ? 'warn' : (t.prio==='Moyenne'?'info':'ok');
-        return `
-          <tr>
-            <td class="tag">${t.id}</td>
-            <td>${t.client}</td>
-            <td>${t.motif}</td>
-            <td><span class="pill ${p}">${t.prio}</span></td>
-            <td class="td-right">
-              <div class="row-actions">
-                <button class="icon-btn" onclick="autoReply('${t.id}')"><i class="fas fa-wand-magic-sparkles"></i></button>
-                <button class="icon-btn" onclick="closeTicket('${t.id}')"><i class="fas fa-check"></i></button>
-              </div>
-            </td>
-          </tr>`;
-      }).join('');
-    }
-    renderTickets();
-
-    function autoReply(id){
-      toast('info','Réponse IA',`Proposition générée pour ${id} (démo).`);
-      pushLog('NetCareX','AI Draft',`Draft for ${id}`,'OK');
-      audit('Admin','NetCareX','AI_DRAFT',`ticket=${id}`,'INFO');
-    }
-    function closeTicket(id){
-      const i = tickets.findIndex(t=>t.id===id);
-      if(i>=0) tickets.splice(i,1);
-      renderTickets();
-      toast('ok','Ticket',`${id} clos.`);
-      pushLog('NetCareX','Ticket Closed',`${id}`,'OK');
-      audit('Admin','NetCareX','CLOSE_TICKET',`ticket=${id}`,'INFO');
-
-      // update mini KPIs support
-      const open = Math.max(0, parseInt(document.getElementById('sOpen').innerText,10)-1);
-      setText('sOpen', String(open));
-      const sla = Math.min(99, rand(90,96));
-      setText('sSLA', `${sla}%`);
-    }
-
-    /* =========================
-       QUALITY CHECKS (PIM)
-    ========================= */
-    function runQualityChecks(){
-      const checks = [
-        {name:'Prix > 0', ok:true},
-        {name:'Stock cohérent (>=0)', ok:true},
-        {name:'Visuels (>=3)', ok: Math.random()>.15},
-        {name:'SEO title present', ok: Math.random()>.25},
-        {name:'Tailles / variantes', ok:true}
-      ];
-      const fails = checks.filter(c=>!c.ok).length;
-      const html = `
-        <div style="display:grid;gap:10px;">
-          ${checks.map(c=>`
-            <div class="pill ${c.ok?'ok':'bad'}" style="justify-content:space-between;">
-              <span><i class="fas ${c.ok?'fa-check':'fa-xmark'}"></i> ${c.name}</span>
-              <span>${c.ok?'PASS':'FAIL'}</span>
-            </div>
-          `).join('')}
-          <div class="hr"></div>
-          <div class="mono" style="color:#fff;font-weight:800;">
-            Résultat: ${fails===0 ? '<span style="color:var(--success)">OK</span>' : '<span style="color:var(--danger)">KO</span>'}
-            <span class="muted" style="font-family:var(--font-ui);font-weight:500;">(${fails} échec(s))</span>
-          </div>
-        </div>
-      `;
-      const out = document.getElementById('qcOut');
-      out.className = 'card';
-      out.style.background = '#0f1216';
-      out.style.border = '1px solid var(--border)';
-      out.innerHTML = html;
-
-      if(fails===0){
-        toast('ok','Qualité PIM','Toutes les règles passent.');
-        pushLog('NetCatX','Rule Engine','All checks PASS','OK');
-      } else {
-        toast('warn','Qualité PIM',`${fails} règle(s) en échec — correction requise.`);
-        pushLog('NetCatX','Rule Engine',`${fails} check(s) FAIL`,'WARN');
-      }
-      audit('Admin','NetCatX','QUALITY_CHECK',`fails=${fails}`,(fails===0?'INFO':'WARN'));
-
-      // update KPI "erreurs"
-      setText('cErr', String(fails));
-      setText('kpiPimErr', `${(fails*0.12).toFixed(2)}%`);
-    }
-
-    /* =========================
-       AUDIT TRAIL (OPS)
+       AUDIT TRAIL
     ========================= */
     const auditEvents = [];
     function audit(user, module, action, detail, level){
       auditEvents.unshift({ts:new Date(), user, module, action, detail, level});
-      if(auditEvents.length>50) auditEvents.pop();
+      if(auditEvents.length>60) auditEvents.pop();
       renderAudit();
     }
-
     function renderAudit(){
       const body = document.getElementById('auditBody');
-      body.innerHTML = auditEvents.slice(0,12).map(a=>{
+      const rows = auditEvents.slice(0,14);
+      body.innerHTML = rows.map(a=>{
         const pill = a.level==='WARN' ? 'warn' : (a.level==='ERROR'?'bad':'info');
         return `
           <tr>
-            <td class="tag">${a.ts.toLocaleString()}</td>
+            <td class="mono" style="font-size:.78rem;color:#9aa3ad;">${a.ts.toLocaleString()}</td>
             <td>${a.user}</td>
             <td><span style="color:var(--primary)">${a.module}</span></td>
-            <td class="tag">${a.action}</td>
+            <td class="mono" style="font-size:.78rem;color:#cbd5e1;">${a.action}</td>
             <td>${a.detail}</td>
             <td class="td-right"><span class="pill ${pill}">${a.level}</span></td>
           </tr>`;
       }).join('');
-      if(auditEvents.length===0){
-        body.innerHTML = `<tr><td colspan="6"><div class="empty">Aucun événement (c’est louche… mais c’est propre).</div></td></tr>`;
+      if(rows.length===0){
+        body.innerHTML = `<tr><td colspan="6"><div class="empty">Aucun événement.</div></td></tr>`;
       }
     }
-
     function exportAuditCSV(){
       const header = ['timestamp','user','module','action','detail','level'];
       const lines = [header.join(',')].concat(
@@ -806,305 +759,640 @@
     }
 
     /* =========================
-       SIMULATION (avec KPIs en sortie)
+       ENTERPRISE KPIs
     ========================= */
-    const scenarios = {
+    function recalcEnterpriseKPIs(){
+      const ttm = rand(10, 22);        // days
+      const dq = (Math.random()*1.5).toFixed(2); // errors/1000
+      const roi = (2 + Math.random()*4).toFixed(1);
+      const sla = rand(88, 97);
+
+      setText('kpiTTM', `${ttm} j`);
+      setText('kpiDQ', `${dq} / 1000`);
+      setText('kpiROI', `${roi}x`);
+      setText('kpiSLA', `${sla}%`);
+
+      toast('info','KPIs', 'KPIs recalculés (démo).');
+      audit('Admin','OPS','KPI_RECALC',`ttm=${ttm}j dq=${dq}/1000 roi=${roi}x sla=${sla}%`,'INFO');
+      pushLog('OPS','KPI','Recalc enterprise KPIs','OK');
+    }
+    recalcEnterpriseKPIs();
+
+    /* =========================
+       TICKETS (Support)
+    ========================= */
+    const tickets = [
+      {id:'#1042', client:'Julie M.', motif:'Retour - taille', prio:'Haute'},
+      {id:'#1043', client:'Karim S.', motif:'Livraison en retard', prio:'Moyenne'},
+      {id:'#1044', client:'Emma R.', motif:'Facturation', prio:'Basse'},
+      {id:'#1045', client:'Noah L.', motif:'Produit défectueux', prio:'Haute'}
+    ];
+    function renderTickets(){
+      const body = document.getElementById('ticketsBody');
+      body.innerHTML = tickets.map(t=>{
+        const p = t.prio==='Haute' ? 'warn' : (t.prio==='Moyenne'?'info':'ok');
+        return `
+          <tr>
+            <td class="mono" style="font-size:.78rem;color:#cbd5e1;">${t.id}</td>
+            <td>${t.client}</td>
+            <td>${t.motif}</td>
+            <td><span class="pill ${p}">${t.prio}</span></td>
+            <td class="td-right">
+              <button class="btn secondary" style="padding:7px 10px" onclick="autoReply('${t.id}')"><i class="fas fa-wand-magic-sparkles"></i></button>
+              <button class="btn secondary" style="padding:7px 10px" onclick="closeTicket('${t.id}')"><i class="fas fa-check"></i></button>
+            </td>
+          </tr>`;
+      }).join('');
+    }
+    renderTickets();
+
+    function autoReply(id){
+      toast('info','Réponse IA',`Draft généré pour ${id} (démo).`);
+      pushLog('NetCareX','AI Draft',`ticket=${id}`,'OK');
+      audit('Admin','NetCareX','AI_DRAFT',`ticket=${id}`,'INFO');
+    }
+    function closeTicket(id){
+      const i = tickets.findIndex(t=>t.id===id);
+      if(i>=0) tickets.splice(i,1);
+      renderTickets();
+      toast('ok','Ticket',`${id} clos.`);
+      pushLog('NetCareX','Ticket Closed',`${id}`,'OK');
+      audit('Admin','NetCareX','CLOSE_TICKET',`ticket=${id}`,'INFO');
+      const open = Math.max(0, parseInt(document.getElementById('sOpen').innerText,10)-1);
+      setText('sOpen', String(open));
+      const sla = Math.min(99, rand(90,96));
+      setText('sSLA', `${sla}%`);
+    }
+
+    /* =========================
+       WORKFLOW ENGINE (n8n-like)
+       - Nodes + edges rendered
+       - Drag nodes
+       - Run animates path + terminal
+    ========================= */
+    let wfSpeed = 1;
+
+    function wfSpeedToggle(){
+      wfSpeed = (wfSpeed===1?2:(wfSpeed===2?3:1));
+      document.getElementById('wfSpeedLbl').innerText = 'x'+wfSpeed;
+      toast('info','Workflow',`Vitesse x${wfSpeed}`);
+    }
+
+    const ICON = {
+      webhook:'fa-code-branch', cron:'fa-clock', file:'fa-file', db:'fa-database',
+      validate:'fa-check', if:'fa-code-compare', code:'fa-code', doc:'fa-folder-open',
+      approval:'fa-user-check', decision:'fa-circle-nodes', pim:'fa-tags',
+      shopify:'fa-shopify', sheet:'fa-table', alert:'fa-bell', retry:'fa-rotate-right',
+      dlq:'fa-inbox', monitor:'fa-chart-line', ticket:'fa-ticket', stop:'fa-ban',
+      social:'fa-hashtag', klaviyo:'fa-paper-plane', analytics:'fa-chart-simple',
+      classify:'fa-filter', lookup:'fa-magnifying-glass', rules:'fa-scale-balanced',
+      refund:'fa-coins', shipping:'fa-truck-fast', notify:'fa-bullhorn', feedback:'fa-star'
+    };
+
+    const WORKFLOWS = {
+      // Inspired by your screenshots (Design)
       design: {
-        title: 'NetDesignX: Création Produit',
-        kpis: { cycleMin:[18,42], cost:[9,19], handoff:'NetCatX' },
-        steps: [
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-pencil-alt visual-icon active"></i>
-                    <h3>Import Croquis</h3>
-                    <div class="visual-card">
-                      <div style="display:flex;justify-content:space-between;">
-                        <span>Sketch_v1.pdf</span><i class="fas fa-file-pdf"></i>
-                      </div>
-                      <div class="progress-bar"><div class="progress-fill" style="width:100%"></div></div>
-                    </div>
-                  </div>`,
-            log: "TRIGGER: New File Upload (Sketch_v1.pdf)"
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-cube visual-icon active" style="color:var(--info)"></i>
-                    <h3>Génération 3D (CLO)</h3>
-                    <div class="visual-card" style="text-align:center;">
-                      <i class="fas fa-tshirt fa-3x" style="color:#555; animation:pulse 1s infinite"></i>
-                      <p style="margin-top:10px">Rendering Mesh...</p>
-                    </div>
-                  </div>`,
-            log: "PROCESS: CLO3D API > Render Assets..."
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-check-circle visual-icon active" style="color:var(--success)"></i>
-                    <h3>Validation</h3>
-                    <div class="visual-card approved">
-                      <strong>Statut:</strong> VALIDÉ<br>
-                      <strong>Contrôle:</strong> Patronage + matière OK
-                      <div class="float-badge show">Envoyé au Catalogue</div>
-                    </div>
-                  </div>`,
-            log: "SUCCESS: Handoff to NetCatX (PIM) completed."
-          }
+        module: 'NetDesignX',
+        canvasId: 'wfCanvasDesign',
+        svgId: 'wfSvgDesign',
+        nodesId: 'wfNodesDesign',
+        termId: 'wfTermDesign',
+        kpiSet: (metrics)=> {
+          setText('dKpiCycle', metrics.cycle);
+          setText('dKpiNoGo', metrics.nogo);
+          setText('dKpiTickets', metrics.tickets);
+          setText('dKpiHandoff', metrics.handoff);
+        },
+        nodes: [
+          {id:'d1', x:28,  y:70,  type:'webhook', title:'Webhook', sub:'Collection validée'},
+          {id:'d2', x:28,  y:170, type:'file',    title:'Trigger fichier', sub:'Tech pack / 3D'},
+          {id:'d3', x:28,  y:270, type:'cron',    title:'Cron', sub:'Rappel validation'},
+          {id:'d4', x:260, y:150, type:'doc',     title:'Capture & structuration', sub:'Set/Merge'},
+          {id:'d5', x:470, y:150, type:'validate',title:'Validation', sub:'IF complet ?'},
+          {id:'d6', x:680, y:150, type:'code',    title:'Normalisation', sub:'Mapping NetMarket'},
+          {id:'d7', x:860, y:150, type:'doc',     title:'Gestion doc', sub:'Drive/SharePoint/S3'},
+          {id:'d8', x:1040,y:150, type:'approval',title:'Approbation', sub:'Workflow approval'},
+          {id:'d9', x:1220,y:150, type:'decision',title:'Décision', sub:'Go / No-Go (IF)'},
+          {id:'d10',x:1400,y:70,  type:'retry',   title:'Retry', sub:'Relance'},
+          {id:'d11',x:1400,y:150, type:'sheet',   title:'Journalisation & KPI', sub:'Logs + KPI'},
+          {id:'d12',x:1400,y:230, type:'ticket',  title:'Ticket IT', sub:'Blocage'},
+          {id:'d13',x:1220,y:260, type:'pim',     title:'Push vers PIM', sub:'Akeneo'},
+          {id:'d14',x:1220,y:360, type:'stop',    title:'Stop/Log', sub:'No-Go'},
+          {id:'d15',x:1040,y:300, type:'alert',   title:'Watcher Cron', sub:'Alerting & maintenance'}
+        ],
+        edges: [
+          ['d1','d4'],['d2','d4'],['d3','d4'],
+          ['d4','d5'],['d5','d6'],['d6','d7'],['d7','d8'],['d8','d9'],
+          ['d9','d11'],['d11','d10'],['d10','d12'],['d12','d15'],
+          ['d9','d13'],['d9','d14'],
+          ['d15','d11']
+        ],
+        run: [
+          {node:'d1', log:'WEBHOOK: Collection validée reçue'},
+          {node:'d4', log:'CAPTURE: agrégation croquis + tech pack + metadata'},
+          {node:'d5', log:'VALIDATION: champs obligatoires + tailles + matières'},
+          {node:'d6', log:'NORMALISATION: mapping vers modèle NetMarket'},
+          {node:'d7', log:'DOC: versioning & stockage centralisé'},
+          {node:'d8', log:'APPROVAL: demande de validation chef de produit'},
+          {node:'d9', log:'DECISION: Go/No-Go'},
+          {node:'d13', log:'GO: push vers Akeneo + handoff Catalogue'},
+          {node:'d11', log:'KPI: cycle time + taux complétude + traçabilité'}
         ]
       },
 
-      promo: {
-        title: 'NetPromoX: Campagne Automatique',
-        kpis: { roi:[2.0,6.5], open:[18,42], revenue:[6000,18000] },
-        steps: [
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-filter visual-icon active"></i>
-                    <h3>Segmentation</h3>
-                    <div class="visual-card">
-                      Filtre: <strong>Clients VIP (&gt;200€)</strong><br>
-                      Résultat: <span class="mono">${fmt(rand(18000, 52000))}</span> contacts
-                    </div>
-                  </div>`,
-            log: "QUERY: Select Users WHERE spend > 200..."
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-paper-plane visual-icon active" style="color:var(--info)"></i>
-                    <h3>Envoi Email</h3>
-                    <div class="visual-card">
-                      <strong>Sujet:</strong> Vente Privée<br>
-                      <strong>Statut:</strong> Sending...
-                      <div class="progress-bar"><div class="progress-fill" style="width:70%"></div></div>
-                    </div>
-                  </div>`,
-            log: "SMTP: Batch sending (emails)..."
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-chart-line visual-icon active" style="color:var(--success)"></i>
-                    <h3>Résultats Live</h3>
-                    <div class="visual-card approved">
-                      <strong>Tracking:</strong> UTM OK<br>
-                      <strong>Attribution:</strong> 7j
-                      <div class="float-badge show">ROI POSITIF</div>
-                    </div>
-                  </div>`,
-            log: "TRACKING: Campaign Active. ROI threshold reached."
-          }
-        ]
-      },
-
+      // Inspired by your screenshots (Catalogue)
       cat: {
-        title: 'NetCatX: Enrichissement Produit',
-        kpis: { pimErr:[0,1], publishMin:[8,22], completeness:[96.0,99.5] },
-        steps: [
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-database visual-icon active"></i>
-                    <h3>Source ERP</h3>
-                    <div class="visual-card">
-                      <span class="mono">SKU: BST-2025<br>Price: 120.00<br>Stock: 36</span>
-                    </div>
-                  </div>`,
-            log: "WATCH: ERP Table Update detected."
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-magic visual-icon active" style="color:purple"></i>
-                    <h3>IA Rédaction</h3>
-                    <div class="visual-card">
-                      Generating description...<br>
-                      <span style="color:#888;">“Découvrez notre veste hiver...”</span>
-                    </div>
-                  </div>`,
-            log: "AI: Generating Description (FR/EN)..."
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fab fa-shopify visual-icon active" style="color:var(--success)"></i>
-                    <h3>Mise en Ligne</h3>
-                    <div class="visual-card approved">
-                      <strong>Shopify:</strong> Published<br>
-                      <strong>Amazon:</strong> Pending
-                    </div>
-                  </div>`,
-            log: "SYNC: Push to Shopify API (200 OK)."
-          }
+        module: 'NetCatX',
+        canvasId: 'wfCanvasCat',
+        svgId: 'wfSvgCat',
+        nodesId: 'wfNodesCat',
+        termId: 'wfTermCat',
+        kpiSet: (metrics)=> {
+          setText('cKpiSync', metrics.sync);
+          setText('cKpiDup', metrics.dup);
+          setText('cKpiDLQ', metrics.dlq);
+          setText('cKpiPublish', metrics.publish);
+        },
+        nodes: [
+          {id:'c1', x:28,  y:90,  type:'webhook', title:'Webhook', sub:'Collection validée'},
+          {id:'c2', x:28,  y:190, type:'file',    title:'Trigger CSV', sub:'Nouveau fournisseur'},
+          {id:'c3', x:28,  y:290, type:'cron',    title:'Cron', sub:'Synchro stock/prix'},
+          {id:'c4', x:260, y:170, type:'doc',     title:'Set / Rename', sub:'Mapping champs'},
+          {id:'c5', x:470, y:170, type:'validate',title:'Validation', sub:'Champs obligatoires'},
+          {id:'c6', x:680, y:170, type:'code',    title:'Normalisation', sub:'Tailles/couleurs/matières'},
+          {id:'c7', x:900, y:170, type:'if',      title:'IF doublons', sub:'Produit existe ?'},
+          {id:'c8', x:1120,y:90,  type:'pim',     title:'Akeneo (Create)', sub:'Produit + variantes'},
+          {id:'c9', x:1120,y:250, type:'pim',     title:'Akeneo (Update)', sub:'Update produit'},
+          {id:'c10',x:1320,y:170, type:'shopify', title:'HTTP Shopify', sub:'Publication produit'},
+          {id:'c11',x:1520,y:170, type:'sheet',   title:'Journalisation', sub:'Log (Sheet/DB/Notion)'},
+          {id:'c12',x:900, y:330, type:'retry',   title:'Retry x3', sub:'Maintenance'},
+          {id:'c13',x:1120,y:330, type:'dlq',     title:'Dead-letter', sub:'Stocker échecs'},
+          {id:'c14',x:1320,y:330, type:'alert',   title:'Alerting', sub:'Email/Teams/Ticket IT'},
+          {id:'c15',x:1520,y:330, type:'monitor', title:'Monitoring', sub:'Rapport quotidien'}
+        ],
+        edges: [
+          ['c1','c4'],['c2','c4'],['c3','c4'],
+          ['c4','c5'],['c5','c6'],['c6','c7'],
+          ['c7','c8'],['c7','c9'],
+          ['c8','c10'],['c9','c10'],
+          ['c10','c11'],
+          ['c10','c12'],['c12','c13'],['c13','c14'],['c14','c15'],['c15','c11']
+        ],
+        run: [
+          {node:'c2', log:'TRIGGER: nouveau CSV fournisseur détecté'},
+          {node:'c4', log:'MAPPING: rename fields → modèle NetMarket'},
+          {node:'c5', log:'VALIDATION: attributs obligatoires + images + prix'},
+          {node:'c6', log:'NORMALISATION: tailles EU/US + matières + coloris'},
+          {node:'c7', log:'DEDUP: create vs update'},
+          {node:'c8', log:'PIM: création produit + variantes (Akeneo)'},
+          {node:'c10',log:'PUBLISH: push Shopify (HTTP request)'},
+          {node:'c11',log:'LOG: journalisation + KPI data quality'}
         ]
       },
 
+      // Inspired by your screenshots (Marketing)
+      mark: {
+        module: 'NetMarkX',
+        canvasId: 'wfCanvasMark',
+        svgId: 'wfSvgMark',
+        nodesId: 'wfNodesMark',
+        termId: 'wfTermMark',
+        kpiSet: (metrics)=> {
+          setText('mKpiConv', metrics.conv);
+          setText('mKpiCTR', metrics.ctr);
+          setText('mKpiROAS', metrics.roas);
+          setText('mKpiPacing', metrics.pacing);
+        },
+        nodes: [
+          {id:'m1', x:28,  y:110, type:'webhook',  title:'Webhook', sub:'Nouvelle collection publiée'},
+          {id:'m2', x:28,  y:230, type:'cron',     title:'Cron', sub:'Calendrier campagnes'},
+          {id:'m3', x:28,  y:350, type:'shopify',  title:'Trigger Shopify', sub:'Panier/achat/retour'},
+          {id:'m4', x:260, y:230, type:'if',       title:'Segment Builder', sub:'VIP / nouveaux / inactifs'},
+          {id:'m5', x:500, y:230, type:'db',       title:'Data Enrichment', sub:'GA4 / Shopify / CRM'},
+          {id:'m6', x:740, y:150, type:'klaviyo',  title:'Klaviyo', sub:'Créer campagne / flow'},
+          {id:'m7', x:740, y:310, type:'social',   title:'Social Scheduling', sub:'Buffer/Hootsuite'},
+          {id:'m8', x:980, y:230, type:'analytics',title:'Tracking & KPI', sub:'ROI / CTR / conversions'},
+          {id:'m9', x:1220,y:230, type:'sheet',    title:'Dashboard Log', sub:'Sheet/DB'},
+          {id:'m10',x:1450,y:230, type:'if',       title:'Alerting (IF)', sub:'ROI < seuil ?'},
+          {id:'m11',x:1660,y:150, type:'alert',    title:'Notification', sub:'Marketing'},
+          {id:'m12',x:1660,y:310, type:'monitor',  title:'Maintenance', sub:'UTM/budget/rapport'}
+        ],
+        edges: [
+          ['m1','m4'],['m2','m4'],['m3','m4'],
+          ['m4','m5'],['m5','m6'],['m5','m7'],
+          ['m6','m8'],['m7','m8'],
+          ['m8','m9'],['m9','m10'],
+          ['m10','m11'],['m10','m12'],['m12','m9']
+        ],
+        run: [
+          {node:'m1', log:'WEBHOOK: collection publiée → démarrage campagne'},
+          {node:'m4', log:'SEGMENT: VIP / nouveaux / inactifs'},
+          {node:'m5', log:'ENRICH: GA4 + Shopify + CRM'},
+          {node:'m6', log:'Klaviyo: création campagne + scheduling'},
+          {node:'m7', log:'Social: planification posts (Buffer/Hootsuite)'},
+          {node:'m8', log:'TRACKING: CTR, conversions, ROI (GA4/Meta)'},
+          {node:'m10',log:'ALERT IF: ROI sous seuil → suggestion stop/optimisation'},
+          {node:'m9', log:'DASHBOARD: journalisation et mise à jour KPI'}
+        ]
+      },
+
+      // Inspired by your screenshots (Service Client)
       care: {
-        title: 'NetCareX: Gestion Ticket IA',
-        kpis: { sla:[86,97], frtMin:[12,140], csat:[4.2,4.95] },
-        steps: [
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-envelope visual-icon active"></i>
-                    <h3>Nouveau Ticket</h3>
-                    <div class="visual-card">
-                      <strong>De:</strong> Julie M.<br>
-                      <strong>Sujet:</strong> “Taille trop petite...”
-                    </div>
-                  </div>`,
-            log: "WEBHOOK: Ticket Created (Zendesk)."
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-brain visual-icon active" style="color:var(--danger)"></i>
-                    <h3>Analyse IA</h3>
-                    <div class="visual-card alert">
-                      <strong>Sentiment:</strong> Négatif<br>
-                      <strong>Intention:</strong> Retour
-                    </div>
-                  </div>`,
-            log: "NLP: Sentiment Score -0.8. Category: Return."
-          },
-          {
-            html: `<div class="stage-container">
-                    <i class="fas fa-shipping-fast visual-icon active" style="color:var(--success)"></i>
-                    <h3>Résolution Auto</h3>
-                    <div class="visual-card approved">
-                      Étiquette Retour Générée<br>
-                      Email envoyé.
-                      <div class="float-badge show">Ticket Clos</div>
-                    </div>
-                  </div>`,
-            log: "ACTION: Generate Label & Close Ticket."
-          }
+        module: 'NetCareX',
+        canvasId: 'wfCanvasCare',
+        svgId: 'wfSvgCare',
+        nodesId: 'wfNodesCare',
+        termId: 'wfTermCare',
+        kpiSet: (metrics)=> {
+          setText('sKpiTTR', metrics.ttr);
+          setText('sKpiBreach', metrics.breach);
+          setText('sKpiAuto', metrics.auto);
+          setText('sKpiRMA', metrics.rma);
+        },
+        nodes: [
+          {id:'s1', x:28,  y:90,  type:'webhook',  title:'Webhook', sub:'Zendesk/Gorgias ticket créé'},
+          {id:'s2', x:28,  y:210, type:'shopify',  title:'Trigger Shopify', sub:'RMA / retour'},
+          {id:'s3', x:28,  y:330, type:'cron',     title:'Cron', sub:'Relance satisfaction J+3'},
+          {id:'s4', x:260, y:210, type:'classify', title:'Classifier (IA/IF)', sub:'retour/taille/remb.'},
+          {id:'s5', x:500, y:210, type:'lookup',   title:'Lookup Order', sub:'Shopify'},
+          {id:'s6', x:740, y:210, type:'rules',    title:'Règles de gestion', sub:'<30j ? défaut ?'},
+          {id:'s7', x:980, y:90,  type:'shipping', title:'Retour standard', sub:'Étiquette + email'},
+          {id:'s8', x:980, y:210, type:'doc',      title:'Échange taille', sub:'Nouvelle commande + stock'},
+          {id:'s9', x:980, y:330, type:'refund',   title:'Remboursement', sub:'Déclencher'},
+          {id:'s10',x:1220,y:210, type:'doc',      title:'Update Ticket', sub:'notes, SLA, tags'},
+          {id:'s11',x:1450,y:90,  type:'notify',   title:'Notification interne', sub:'logistique/qualité/finance'},
+          {id:'s12',x:1450,y:210, type:'sheet',    title:'Journalisation', sub:'log temps/action'},
+          {id:'s13',x:1450,y:330, type:'if',       title:'Alerting (IF)', sub:'SLA dépassé ?'},
+          {id:'s14',x:1680,y:330, type:'alert',    title:'Escalade', sub:'responsable support'},
+          {id:'s15',x:1220,y:360, type:'feedback', title:'Customer feedback', sub:'CSAT/NPS'}
+        ],
+        edges: [
+          ['s1','s4'],['s2','s4'],['s3','s15'],
+          ['s4','s5'],['s5','s6'],
+          ['s6','s7'],['s6','s8'],['s6','s9'],
+          ['s7','s10'],['s8','s10'],['s9','s10'],
+          ['s10','s11'],['s10','s12'],['s12','s13'],['s13','s14'],
+          ['s10','s15']
+        ],
+        run: [
+          {node:'s1', log:'WEBHOOK: ticket créé (Zendesk/Gorgias)'},
+          {node:'s4', log:'CLASSIF: retour vs échange vs remboursement'},
+          {node:'s5', log:'LOOKUP: récupération commande Shopify'},
+          {node:'s6', log:'RULES: délai retour / produit défectueux / SLA'},
+          {node:'s7', log:'ACTION: étiquette retour + email'},
+          {node:'s10',log:'UPDATE: ticket + statut + tags + SLA'},
+          {node:'s12',log:'LOG: temps de traitement + KPI'},
+          {node:'s15',log:'CSAT: envoi survey satisfaction'}
         ]
       }
     };
 
-    let currentSim = null;
-    let speed = 1;
+    // Node drag registry
+    const dragState = {active:false, wfKey:null, nodeId:null, dx:0, dy:0};
 
-    function startSim(key){
-      currentSim = scenarios[key];
-      document.getElementById('simTitle').innerText = currentSim.title;
-      document.getElementById('simModal').classList.add('active');
-      document.getElementById('stage').innerHTML = '<div style="color:#666">Prêt.</div>';
-      document.getElementById('terminal').innerHTML = '<div>> System Ready.</div>';
-      document.getElementById('btnRun').disabled = false;
+    function loadWorkflow(key){
+      const wf = WORKFLOWS[key];
+      if(!wf) return;
 
-      audit('Admin', key==='design'?'NetDesignX':key==='promo'?'NetPromoX':key==='cat'?'NetCatX':'NetCareX',
-        'SIM_OPEN', currentSim.title, 'INFO');
-    }
+      const canvas = document.getElementById(wf.canvasId);
+      const svg = document.getElementById(wf.svgId);
+      const nodesHost = document.getElementById(wf.nodesId);
+      const term = document.getElementById(wf.termId);
 
-    function closeSim(){ document.getElementById('simModal').classList.remove('active'); }
-
-    function toggleSpeed(){
-      speed = (speed===1?2:(speed===2?3:1));
-      document.getElementById('speedLbl').innerText = 'x'+speed;
-      toast('info','Simulation',`Vitesse: x${speed}`);
-    }
-
-    function runSequence(){
-      const btn = document.getElementById('btnRun');
-      btn.disabled = true;
-      const term = document.getElementById('terminal');
-      const stage = document.getElementById('stage');
+      // Reset
+      nodesHost.innerHTML = '';
+      svg.innerHTML = '';
       term.innerHTML = '';
+      wf.nodes.forEach(n => n._status = 'idle');
 
-      const stepDelay = Math.round(2000 / speed);
+      // Create nodes
+      for(const n of wf.nodes){
+        const div = document.createElement('div');
+        div.className = 'node';
+        div.style.left = n.x + 'px';
+        div.style.top  = n.y + 'px';
+        div.dataset.id = n.id;
+        const ic = ICON[n.type] || 'fa-circle';
+        div.innerHTML = `
+          <div class="ic"><i class="fas ${ic}"></i></div>
+          <div class="t">
+            <div class="title">${n.title}</div>
+            <div class="sub">${n.sub}</div>
+          </div>
+          <div class="badge idle">IDLE</div>
+        `;
+        div.addEventListener('mousedown', (e)=> startDrag(e, key, n.id));
+        nodesHost.appendChild(div);
+      }
 
-      currentSim.steps.forEach((step, i)=>{
+      // Draw edges
+      drawEdges(key);
+
+      // Baseline KPIs in panels
+      if(key==='design'){
+        wf.kpiSet({cycle:'—', nogo:'—', tickets:'—', handoff:'—'});
+        termLog(key, '>> Workflow chargé (NetDesignX).');
+      }
+      if(key==='cat'){
+        wf.kpiSet({sync:'—', dup:'—', dlq:'—', publish:'—'});
+        termLog(key, '>> Workflow chargé (NetCatX).');
+      }
+      if(key==='mark'){
+        wf.kpiSet({conv:'—', ctr:'—', roas:'—', pacing:'—'});
+        termLog(key, '>> Workflow chargé (NetMarkX).');
+      }
+      if(key==='care'){
+        wf.kpiSet({ttr:'—', breach:'—', auto:'—', rma:'—'});
+        termLog(key, '>> Workflow chargé (NetCareX).');
+      }
+
+      toast('ok','Workflow',`${wf.module} chargé.`);
+      audit('Admin', wf.module, 'WF_LOAD', 'workflow loaded', 'INFO');
+      pushLog(wf.module, 'Workflow', 'Loaded', 'OK');
+    }
+
+    function drawEdges(key){
+      const wf = WORKFLOWS[key];
+      const svg = document.getElementById(wf.svgId);
+      const nodesHost = document.getElementById(wf.nodesId);
+
+      const rect = nodesHost.getBoundingClientRect();
+
+      const getNodeEl = (id)=> nodesHost.querySelector(`.node[data-id="${id}"]`);
+
+      const width = nodesHost.clientWidth;
+      const height = nodesHost.clientHeight;
+      svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+      svg.setAttribute('width', width);
+      svg.setAttribute('height', height);
+
+      // defs (arrow)
+      svg.innerHTML = `
+        <defs>
+          <marker id="arrow-${key}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+            <path d="M 0 0 L 10 5 L 0 10 z" fill="rgba(212,175,55,.55)"></path>
+          </marker>
+        </defs>
+      `;
+
+      for(const [from,to] of wf.edges){
+        const a = getNodeEl(from);
+        const b = getNodeEl(to);
+        if(!a || !b) continue;
+
+        const ax = a.offsetLeft + a.offsetWidth;
+        const ay = a.offsetTop  + a.offsetHeight/2;
+        const bx = b.offsetLeft;
+        const by = b.offsetTop  + b.offsetHeight/2;
+
+        const mx = (ax + bx)/2;
+
+        const path = document.createElementNS('http://www.w3.org/2000/svg','path');
+        path.setAttribute('d', `M ${ax} ${ay} C ${mx} ${ay}, ${mx} ${by}, ${bx} ${by}`);
+        path.setAttribute('fill','none');
+        path.setAttribute('stroke','rgba(212,175,55,.35)');
+        path.setAttribute('stroke-width','2');
+        path.setAttribute('marker-end', `url(#arrow-${key})`);
+        svg.appendChild(path);
+      }
+    }
+
+    function startDrag(e, key, nodeId){
+      dragState.active = true;
+      dragState.wfKey = key;
+      dragState.nodeId = nodeId;
+
+      const wf = WORKFLOWS[key];
+      const host = document.getElementById(wf.nodesId);
+      const el = host.querySelector(`.node[data-id="${nodeId}"]`);
+      if(!el) return;
+
+      const rect = el.getBoundingClientRect();
+      dragState.dx = e.clientX - rect.left;
+      dragState.dy = e.clientY - rect.top;
+      el.style.cursor = 'grabbing';
+    }
+    window.addEventListener('mousemove', (e)=>{
+      if(!dragState.active) return;
+      const wf = WORKFLOWS[dragState.wfKey];
+      const host = document.getElementById(wf.nodesId);
+      const el = host.querySelector(`.node[data-id="${dragState.nodeId}"]`);
+      if(!el) return;
+
+      const hostRect = host.getBoundingClientRect();
+      let x = e.clientX - hostRect.left - dragState.dx;
+      let y = e.clientY - hostRect.top  - dragState.dy;
+
+      x = Math.max(6, Math.min(x, host.clientWidth - el.offsetWidth - 6));
+      y = Math.max(6, Math.min(y, host.clientHeight - el.offsetHeight - 6));
+
+      el.style.left = x + 'px';
+      el.style.top  = y + 'px';
+      drawEdges(dragState.wfKey);
+    });
+    window.addEventListener('mouseup', ()=>{
+      if(!dragState.active) return;
+      const wf = WORKFLOWS[dragState.wfKey];
+      const host = document.getElementById(wf.nodesId);
+      const el = host.querySelector(`.node[data-id="${dragState.nodeId}"]`);
+      if(el) el.style.cursor = 'grab';
+      dragState.active=false; dragState.wfKey=null; dragState.nodeId=null;
+    });
+
+    function setNodeStatus(key, nodeId, status){
+      const wf = WORKFLOWS[key];
+      const host = document.getElementById(wf.nodesId);
+      const el = host.querySelector(`.node[data-id="${nodeId}"]`);
+      if(!el) return;
+      el.classList.remove('active','ok','warn','fail');
+      const badge = el.querySelector('.badge');
+      badge.classList.remove('ok','warn','fail','idle');
+
+      if(status==='active'){
+        el.classList.add('active');
+        badge.classList.add('idle');
+        badge.textContent = 'RUN';
+      } else if(status==='ok'){
+        el.classList.add('ok');
+        badge.classList.add('ok');
+        badge.textContent = 'OK';
+      } else if(status==='warn'){
+        el.classList.add('warn');
+        badge.classList.add('warn');
+        badge.textContent = 'WARN';
+      } else if(status==='fail'){
+        el.classList.add('fail');
+        badge.classList.add('fail');
+        badge.textContent = 'FAIL';
+      } else {
+        badge.classList.add('idle');
+        badge.textContent = 'IDLE';
+      }
+    }
+
+    function termLog(key, text){
+      const wf = WORKFLOWS[key];
+      const term = document.getElementById(wf.termId);
+      const time = new Date().toLocaleTimeString();
+      const line = document.createElement('div');
+      line.className = 'term-line';
+      line.innerHTML = `<span class="term-time">[${time}]</span><span class="term-text">${text}</span>`;
+      term.appendChild(line);
+      term.scrollTop = term.scrollHeight;
+    }
+
+    let wfRunLock = false;
+
+    function runWorkflow(key){
+      if(wfRunLock){ toast('warn','Workflow','Déjà en cours… laissez-le respirer.'); return; }
+      const wf = WORKFLOWS[key];
+      if(!wf) return;
+
+      wfRunLock = true;
+      termLog(key, `>> EXECUTION START (${wf.module})`);
+      audit('Admin', wf.module, 'WF_RUN', 'execution start', 'INFO');
+      pushLog(wf.module, 'Workflow', 'Run start', 'OK');
+
+      // Reset statuses
+      wf.nodes.forEach(n=> setNodeStatus(key, n.id, 'idle'));
+
+      const stepDelay = Math.round(1200 / wfSpeed);
+
+      // Simulated outcomes per workflow
+      const outcome = buildOutcome(key);
+
+      wf.run.forEach((step, i)=>{
         setTimeout(()=>{
-          stage.innerHTML = step.html;
+          // Active
+          setNodeStatus(key, step.node, 'active');
+          termLog(key, step.log);
 
-          const time = new Date().toLocaleTimeString();
-          const line = `<div class="term-line"><span class="term-time">[${time}]</span> <span class="term-text">${step.log}</span></div>`;
-          term.insertAdjacentHTML('beforeend', line);
-          term.scrollTop = term.scrollHeight;
+          // Make some steps warn/fail to illustrate maintenance paths (rare)
+          const verdict = outcome.verdicts[step.node] || 'ok';
+          // close previous node to ok
+          if(i>0){
+            const prev = wf.run[i-1].node;
+            const prevVerdict = outcome.verdicts[prev] || 'ok';
+            setNodeStatus(key, prev, prevVerdict);
+          }
 
-          // Inject logs in main stream (réalisme)
-          pushLog(
-            currentSim.title.split(':')[0],
-            step.log.split(':')[0] || 'STEP',
-            step.log,
-            'OK'
-          );
+          // end
+          if(i === wf.run.length - 1){
+            setTimeout(()=>{
+              setNodeStatus(key, step.node, verdict);
+              termLog(key, `>> KPIs: ${outcome.kpiLine}`);
+              termLog(key, `>> EXECUTION END (${verdict.toUpperCase()})`);
 
-          if(i === currentSim.steps.length - 1){
-            setTimeout(()=> {
-              const kpiText = computeScenarioKPIs(currentSim);
-              term.insertAdjacentHTML('beforeend',
-                `<div class="term-line"><span class="term-text term-highlight">>>> KPIs:</span> <span class="term-text">${kpiText}</span></div>`
-              );
-              term.insertAdjacentHTML('beforeend',
-                `<div class="term-line"><span style="color:var(--success)">>>> PROCESS COMPLETED.</span></div>`
-              );
-              btn.disabled = false;
+              // Update workflow KPIs panel
+              wf.kpiSet(outcome.panel);
 
-              toast('ok','Simulation',`Séquence terminée. KPIs générés.`);
-            }, Math.round(1000 / speed));
+              // Update enterprise KPIs lightly
+              bumpEnterpriseKPIsFromRun(key, outcome);
+
+              // Logs + audit
+              pushLog(wf.module,'WF_RESULT', outcome.kpiLine, verdict==='ok'?'OK':'WARN');
+              audit('Admin', wf.module, 'WF_RESULT', outcome.kpiLine, verdict==='ok'?'INFO':'WARN');
+
+              toast(verdict==='ok'?'ok':'warn', 'Workflow', `${wf.module} terminé — KPIs générés.`);
+              wfRunLock = false;
+            }, Math.round(900 / wfSpeed));
           }
         }, i * stepDelay);
       });
     }
 
-    function computeScenarioKPIs(sim){
-      // KPI "business-friendly" + mise à jour dashboard
-      if(sim === scenarios.design){
-        const cycle = rand(sim.kpis.cycleMin[0], sim.kpis.cycleMin[1]);
-        const cost = (Math.random()*(sim.kpis.cost[1]-sim.kpis.cost[0]) + sim.kpis.cost[0]).toFixed(2);
-        setText('dLead', (cycle/60).toFixed(1)+' h');
-        setText('dCost', cost+'€');
-        setText('kpiCycle', cycle+' min');
-        audit('Admin','NetDesignX','SIM_RESULT',`cycle=${cycle}min, cost=${cost}€`, 'INFO');
-        return `cycle_time=${cycle}min | proto_cost=${cost}€ | handoff=${sim.kpis.handoff}`;
+    function buildOutcome(key){
+      // KPIs + light randomness, aligned with each department
+      if(key==='design'){
+        const cycleMin = rand(18, 52);
+        const nogo = rand(6, 18);
+        const tickets = (Math.random()<0.2)? 1 : 0;
+        const handoff = (100 - rand(2,10)) + '%';
+        const verdicts = {};
+        if(tickets===1){ verdicts['d12']='warn'; verdicts['d15']='warn'; }
+        return {
+          verdicts,
+          panel: {cycle: `${cycleMin} min`, nogo: `${nogo}%`, tickets: `${tickets}`, handoff},
+          kpiLine: `cycle_time=${cycleMin}min | nogo=${nogo}% | tickets_it=${tickets} | handoff=${handoff}`
+        };
       }
+      if(key==='cat'){
+        const sync = rand(95, 100);
+        const dup = rand(0, 7);
+        const dlq = (Math.random()<0.15)? rand(1,4) : 0;
+        const publish = rand(8, 22) + ' min';
+        const verdicts = {};
+        if(dlq>0){ verdicts['c13']='warn'; verdicts['c14']='warn'; verdicts['c15']='warn'; }
+        return {
+          verdicts,
+          panel: {sync: `${sync}%`, dup: `${dup}`, dlq: `${dlq}`, publish},
+          kpiLine: `sync_success=${sync}% | duplicates=${dup} | dead_letter=${dlq} | publish_time=${publish}`
+        };
+      }
+      if(key==='mark'){
+        const conv = fmt(rand(420, 1450));
+        const ctr = (Math.random()*1.8 + 1.2).toFixed(2) + provePercent();
+        const roas = (Math.random()*4 + 1.8).toFixed(1) + 'x';
+        const pacing = (rand(92, 108)) + '%';
+        const lowRoi = parseFloat(roas) < 2.6;
+        const verdicts = {};
+        if(lowRoi){ verdicts['m10']='warn'; verdicts['m11']='warn'; }
+        return {
+          verdicts,
+          panel: {conv, ctr, roas, pacing},
+          kpiLine: `conversions=${conv} | ctr=${ctr} | roas=${roas} | budget_pacing=${pacing}`
+        };
+      }
+      if(key==='care'){
+        const ttr = rand(35, 210) + ' min';
+        const breach = (Math.random()<0.18)? fmt(rand(8, 42)) : '0';
+        const auto = rand(25, 62) + '%';
+        const rma = fmt(rand(60, 240));
+        const verdicts = {};
+        if(breach!=='0'){ verdicts['s13']='warn'; verdicts['s14']='warn'; }
+        return {
+          verdicts,
+          panel: {ttr, breach, auto, rma},
+          kpiLine: `ttr=${ttr} | sla_breach=${breach} | auto_resolution=${auto} | rma=${rma}`
+        };
+      }
+      return {verdicts:{}, panel:{}, kpiLine:'n/a'};
+    }
+    function provePercent(){ return '%'; }
 
-      if(sim === scenarios.promo){
-        const roi = (Math.random()*(sim.kpis.roi[1]-sim.kpis.roi[0]) + sim.kpis.roi[0]).toFixed(1);
-        const open = rand(sim.kpis.open[0], sim.kpis.open[1]);
-        const rev = rand(sim.kpis.revenue[0], sim.kpis.revenue[1]);
-        setText('pROI', roi+'x');
-        setText('pOpen', open+'%');
-        setText('kpiROI', roi+'x');
-        audit('Admin','NetPromoX','SIM_RESULT',`roi=${roi}x, open=${open}%, revenue=${rev}€`, 'INFO');
-        return `roi=${roi}x | open_rate=${open}% | revenue=${rev}€`;
+    function bumpEnterpriseKPIsFromRun(key, outcome){
+      // This gives you a “global dashboard effect” when you run workflows
+      if(key==='design'){
+        setText('kpiTTM', `${rand(10,20)} j`);
       }
-
-      if(sim === scenarios.cat){
-        const errs = rand(sim.kpis.pimErr[0], sim.kpis.pimErr[1]);
-        const pub = rand(sim.kpis.publishMin[0], sim.kpis.publishMin[1]);
-        const comp = (Math.random()*(sim.kpis.completeness[1]-sim.kpis.completeness[0]) + sim.kpis.completeness[0]).toFixed(1);
-        setText('cErr', String(errs));
-        setText('cPub', pub+' min');
-        setText('cComp', comp+'%');
-        setText('kpiPimErr', (errs*0.12).toFixed(2)+'%');
-        audit('Admin','NetCatX','SIM_RESULT',`errors=${errs}, publish=${pub}min, completeness=${comp}%`, errs? 'WARN':'INFO');
-        return `pim_errors=${errs} | publish_time=${pub}min | completeness=${comp}%`;
+      if(key==='cat'){
+        setText('kpiDQ', `${(Math.random()*1.4).toFixed(2)} / 1000`);
       }
-
-      if(sim === scenarios.care){
-        const sla = rand(sim.kpis.sla[0], sim.kpis.sla[1]);
-        const frt = rand(sim.kpis.frtMin[0], sim.kpis.frtMin[1]);
-        const csat = (Math.random()*(sim.kpis.csat[1]-sim.kpis.csat[0]) + sim.kpis.csat[0]).toFixed(2);
-        setText('sSLA', sla+'%');
-        setText('sFRT', frt+' min');
-        setText('sCSAT', csat+'/5');
-        setText('kpiSLA', sla+'%');
-        audit('Admin','NetCareX','SIM_RESULT',`sla=${sla}%, frt=${frt}min, csat=${csat}/5`, sla<90?'WARN':'INFO');
-        return `sla_24h=${sla}% | first_response=${frt}min | csat=${csat}/5`;
+      if(key==='mark'){
+        setText('kpiROI', `${(2 + Math.random()*4).toFixed(1)}x`);
       }
-      return 'n/a';
+      if(key==='care'){
+        setText('kpiSLA', `${rand(88,97)}%`);
+      }
     }
 
     /* =========================
-       INIT
+       INIT: load default workflows when opening each page
     ========================= */
-    // seed audit events
-    audit('System','OPS','BOOT','titan-v8.3.2 ready','INFO');
-    audit('Admin','NetCatX','SYNC','Shopify connected (demo)','INFO');
-    audit('Admin','NetCareX','SLA_POLICY','24h target=95%','INFO');
-    audit('Admin','NetPromoX','TRACKING','UTM enabled','INFO');
+    audit('System','OPS','BOOT','titan-v8.workflow-suite ready','INFO');
+    audit('Admin','NetDesignX','POLICY','Gate validation + approval + Go/No-Go','INFO');
+    audit('Admin','NetCatX','POLICY','PIM single source of truth + DLQ','INFO');
+    audit('Admin','NetMarkX','POLICY','ROI threshold alerting','INFO');
+    audit('Admin','NetCareX','POLICY','SLA monitoring + escalation','INFO');
 
-    // baseline KPIs
-    setText('kpiCycle','16 min');
-    setText('kpiPimErr','0.00%');
-    setText('kpiSLA','92%');
-    setText('kpiROI','5.2x');
+    // Preload design workflow first time for illustration
+    loadWorkflow('design');
+
+    /* Small cosmetic default KPIs */
+    setText('kpiTTM', '—');
+    setText('kpiDQ', '—');
+    setText('kpiROI', '—');
+    setText('kpiSLA', '—');
   </script>
 </body>
 </html>
