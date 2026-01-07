@@ -3,792 +3,482 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NetMarket OS - TITAN Edition</title>
+    <title>NetMarket OS - TITAN Ultimate</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
 
     <style>
-        /* --- CORE VARIABLES --- */
+        /* --- 1. CORE VARIABLES & THEME --- */
         :root {
-            --primary: #d4af37; 
-            --primary-dim: rgba(212, 175, 55, 0.1);
-            --secondary: #6c5ce7;
-            --success: #00b894;
-            --danger: #d63031;
-            --warning: #fdcb6e;
-            --info: #0984e3;
-            
-            --bg-body: #0f1115;
-            --bg-sidebar: #161b22;
-            --bg-card: #1f242c;
-            --bg-hover: #2d333b;
-            
-            --text-main: #e6edf3;
-            --text-muted: #8b949e;
-            --border: #30363d;
-            
-            --shadow: 0 4px 12px rgba(0,0,0,0.2);
-            --radius: 8px;
-            
+            --primary: #d4af37; /* Gold Premium */
+            --primary-glow: rgba(212, 175, 55, 0.4);
+            --bg-deep: #0b0c10;
+            --bg-sidebar: #111418;
+            --bg-panel: #1a1d21;
+            --bg-card: #212529;
+            --border: #2d3238;
+            --text-main: #e0e6ed;
+            --text-muted: #949ba3;
+            --accent-blue: #4dabf7;
+            --accent-green: #51cf66;
+            --accent-red: #ff6b6b;
             --font-ui: 'Inter', sans-serif;
+            --font-head: 'Playfair Display', serif;
             --font-code: 'JetBrains Mono', monospace;
+            --radius: 8px;
+            --sidebar-w: 280px;
         }
 
-        /* Light Mode Variables (Switchable) */
-        body.light-mode {
-            --bg-body: #f4f6f8;
-            --bg-sidebar: #ffffff;
-            --bg-card: #ffffff;
-            --bg-hover: #f1f1f1;
-            --text-main: #24292f;
-            --text-muted: #57606a;
-            --border: #d0d7de;
-        }
+        * { box-sizing: border-box; margin: 0; padding: 0; scrollbar-width: thin; scrollbar-color: var(--border) var(--bg-deep); }
+        body { background: var(--bg-deep); color: var(--text-main); font-family: var(--font-ui); height: 100vh; display: flex; overflow: hidden; }
 
-        /* --- RESET & BASE --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; outline: none; }
-        ::-webkit-scrollbar { width: 8px; height: 8px; }
-        ::-webkit-scrollbar-track { background: var(--bg-body); }
-        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
+        /* --- 2. LAYOUT --- */
+        .sidebar { width: var(--sidebar-w); background: var(--bg-sidebar); border-right: 1px solid var(--border); display: flex; flex-direction: column; z-index: 10; }
+        .main-wrapper { flex: 1; display: flex; flex-direction: column; position: relative; overflow: hidden; }
+        .top-bar { height: 60px; border-bottom: 1px solid var(--border); background: var(--bg-sidebar); display: flex; align-items: center; justify-content: space-between; padding: 0 25px; }
+        .content-area { flex: 1; overflow-y: auto; padding: 30px; position: relative; }
 
-        body {
-            background-color: var(--bg-body);
-            color: var(--text-main);
-            font-family: var(--font-ui);
-            height: 100vh;
-            display: flex;
-            overflow: hidden;
-            transition: background 0.3s, color 0.3s;
-        }
+        /* --- 3. COMPONENTS --- */
+        /* Brand */
+        .brand { padding: 25px; font-family: var(--font-head); font-size: 1.4rem; color: #fff; letter-spacing: 0.5px; display: flex; align-items: center; gap: 10px; }
+        .brand i { color: var(--primary); filter: drop-shadow(0 0 5px var(--primary-glow)); }
 
-        /* --- SIDEBAR --- */
-        .sidebar {
-            width: 280px;
-            background: var(--bg-sidebar);
-            border-right: 1px solid var(--border);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            z-index: 20;
-            transition: 0.3s;
-        }
-
-        .brand {
-            font-size: 1.4rem;
-            font-weight: 800;
-            color: var(--text-main);
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            letter-spacing: -0.5px;
-        }
-        .brand i { color: var(--primary); }
-
-        .nav-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-            font-weight: 700;
-            margin: 20px 0 10px 10px;
-            letter-spacing: 0.5px;
-        }
-
-        .nav-item {
-            padding: 12px 15px;
-            border-radius: var(--radius);
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            color: var(--text-muted);
-            font-weight: 500;
-            transition: 0.2s;
-            margin-bottom: 4px;
-        }
-        .nav-item:hover { background: var(--bg-hover); color: var(--text-main); }
-        .nav-item.active { background: var(--primary-dim); color: var(--primary); border-left: 3px solid var(--primary); }
+        /* Nav */
+        .nav-section { padding: 0 15px; margin-bottom: 20px; }
+        .nav-label { font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; margin-bottom: 8px; padding-left: 10px; }
+        .nav-item { padding: 10px 15px; border-radius: var(--radius); cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 0.9rem; color: var(--text-muted); transition: 0.2s; margin-bottom: 2px; }
+        .nav-item:hover { background: rgba(255,255,255,0.05); color: #fff; }
+        .nav-item.active { background: rgba(212, 175, 55, 0.1); color: var(--primary); border-left: 3px solid var(--primary); }
         .nav-item i { width: 20px; text-align: center; }
 
-        /* Server Status Widget */
-        .server-widget {
-            margin-top: auto;
-            background: rgba(0,0,0,0.2);
-            padding: 15px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
+        /* Cards */
+        .grid-3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 20px; }
+        .card { background: var(--bg-panel); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; position: relative; overflow: hidden; transition: transform 0.2s; }
+        .card:hover { border-color: var(--text-muted); transform: translateY(-2px); }
+        .card-head { display: flex; justify-content: space-between; margin-bottom: 15px; align-items: center; }
+        .card-title { font-size: 1rem; font-weight: 600; }
+        .stat-val { font-size: 2rem; font-weight: 700; color: #fff; font-family: var(--font-code); }
+        
+        /* Typography Content */
+        .doc-section { max-width: 900px; margin: 0 auto; background: var(--bg-panel); padding: 40px; border-radius: var(--radius); border: 1px solid var(--border); box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+        .doc-title { font-family: var(--font-head); font-size: 2.5rem; margin-bottom: 20px; color: var(--primary); }
+        .doc-subtitle { font-size: 1.5rem; margin: 30px 0 15px 0; color: #fff; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+        .doc-text { font-size: 1rem; line-height: 1.7; color: #ccc; margin-bottom: 15px; text-align: justify; }
+        .doc-list { margin-left: 20px; margin-bottom: 15px; color: #ccc; line-height: 1.6; }
+        .doc-highlight { background: rgba(212, 175, 55, 0.1); padding: 2px 5px; border-radius: 4px; color: var(--primary); }
+
+        /* Org Chart CSS */
+        .tree { display: flex; justify-content: center; margin-top: 30px; }
+        .tree ul { padding-top: 20px; position: relative; transition: all 0.5s; display: flex; justify-content: center; }
+        .tree li { float: left; text-align: center; list-style-type: none; position: relative; padding: 20px 5px 0 5px; }
+        .tree li::before, .tree li::after { content: ''; position: absolute; top: 0; right: 50%; border-top: 1px solid #555; width: 50%; height: 20px; }
+        .tree li::after { right: auto; left: 50%; border-left: 1px solid #555; }
+        .tree li:only-child::after, .tree li:only-child::before { display: none; }
+        .tree li:only-child { padding-top: 0; }
+        .tree li:first-child::before, .tree li:last-child::after { border: 0 none; }
+        .tree li:last-child::before { border-right: 1px solid #555; border-radius: 0 5px 0 0; }
+        .tree li:first-child::after { border-radius: 5px 0 0 0; }
+        .tree ul ul::before { content: ''; position: absolute; top: 0; left: 50%; border-left: 1px solid #555; width: 0; height: 20px; }
+        
+        .member-card { 
+            background: var(--bg-card); border: 1px solid var(--border); padding: 15px; border-radius: 8px; 
+            display: inline-block; width: 220px; transition: 0.3s; position: relative; z-index: 2;
         }
-        .server-row { display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 5px; }
-        .server-bar-bg { height: 4px; background: #333; border-radius: 2px; overflow: hidden; margin-bottom: 10px; }
-        .server-bar-fill { height: 100%; background: var(--success); width: 40%; transition: width 0.5s; }
-        .pulse { animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { opacity: 0.5; } 50% { opacity: 1; } 100% { opacity: 0.5; } }
+        .member-card:hover { border-color: var(--primary); transform: scale(1.05); box-shadow: 0 0 15px rgba(212,175,55,0.2); }
+        .member-img { width: 60px; height: 60px; border-radius: 50%; border: 2px solid var(--primary); object-fit: cover; margin-bottom: 10px; background: #333; }
+        .member-name { font-weight: 700; color: #fff; font-size: 0.95rem; }
+        .member-role { font-size: 0.75rem; color: var(--primary); text-transform: uppercase; margin-top: 5px; font-weight: 600; }
+        .member-tags { display: flex; justify-content: center; gap: 5px; margin-top: 8px; flex-wrap: wrap; }
+        .tag { font-size: 0.65rem; background: #333; padding: 2px 6px; border-radius: 4px; color: #aaa; }
 
-        /* --- MAIN CONTENT --- */
-        .main-wrapper { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
+        /* Simulation Modal */
+        .sim-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 2000; display: none; flex-direction: column; }
+        .sim-overlay.active { display: flex; animation: fadeIn 0.3s; }
+        .sim-header { height: 60px; border-bottom: 1px solid #333; display: flex; align-items: center; justify-content: space-between; padding: 0 30px; background: #111; }
+        .sim-body { flex: 1; display: flex; overflow: hidden; }
+        .sim-view-left { flex: 1; border-right: 1px solid #333; background: #0d0d0d; display: flex; align-items: center; justify-content: center; overflow: auto; padding: 20px; }
+        .sim-view-right { width: 450px; background: #080808; display: flex; flex-direction: column; border-left: 1px solid #333; }
+        .console-out { flex: 1; padding: 20px; font-family: var(--font-code); font-size: 0.8rem; color: #0f0; overflow-y: auto; }
+        .console-line { margin-bottom: 6px; opacity: 0; animation: slideIn 0.2s forwards; border-left: 2px solid transparent; padding-left: 5px; }
+        .console-line.highlight { border-left-color: var(--primary); background: rgba(255,255,255,0.05); }
 
-        /* Top Bar */
-        .topbar {
-            height: 64px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 30px;
-            background: var(--bg-sidebar);
-        }
-        .page-title { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
-        .live-badge { font-size: 0.7rem; background: rgba(212, 175, 55, 0.2); color: var(--primary); padding: 2px 8px; border-radius: 12px; border: 1px solid var(--primary); }
-
-        .top-actions { display: flex; gap: 20px; align-items: center; }
-        .action-btn { background: none; border: none; color: var(--text-muted); font-size: 1.1rem; cursor: pointer; position: relative; }
-        .action-btn:hover { color: var(--text-main); }
-        .notif-badge { position: absolute; top: -5px; right: -5px; width: 8px; height: 8px; background: var(--danger); border-radius: 50%; display: none; }
-        .notif-badge.active { display: block; }
-
-        /* Content Area */
-        .content { flex: 1; overflow-y: auto; padding: 30px; }
-        .view-section { display: none; animation: slideUp 0.4s ease; }
+        .workflow-img { max-width: 100%; max-height: 100%; border-radius: 8px; box-shadow: 0 0 30px rgba(0,0,0,0.5); border: 1px solid #333; transition: 0.3s; }
+        
+        /* Views visibility */
+        .view-section { display: none; animation: fadeIn 0.4s; }
         .view-section.active { display: block; }
-        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateX(10px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
 
-        /* --- DASHBOARD WIDGETS --- */
-        .grid-4 { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px; margin-bottom: 30px; }
-        .stat-card {
-            background: var(--bg-card);
-            padding: 25px;
-            border-radius: var(--radius);
-            border: 1px solid var(--border);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.2s;
-        }
-        .stat-card:hover { transform: translateY(-5px); border-color: var(--text-muted); }
-        .stat-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; }
-        .stat-icon { width: 40px; height: 40px; background: var(--bg-hover); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 1.2rem; }
-        .stat-val { font-size: 2rem; font-weight: 700; color: var(--text-main); font-family: var(--font-code); }
-        .stat-label { font-size: 0.9rem; color: var(--text-muted); margin-top: 5px; }
-        .trend { font-size: 0.8rem; font-weight: 600; display: flex; align-items: center; gap: 5px; margin-top: 10px; }
-        .trend.up { color: var(--success); }
-        .trend.down { color: var(--danger); }
+        /* Tables */
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 15px; }
+        .data-table th { text-align: left; padding: 12px; border-bottom: 1px solid var(--border); color: var(--text-muted); font-size: 0.8rem; text-transform: uppercase; }
+        .data-table td { padding: 12px; border-bottom: 1px solid #252a30; color: #ddd; font-size: 0.9rem; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; font-weight: 700; }
+        .bg-green { background: rgba(81, 207, 102, 0.2); color: #51cf66; }
+        .bg-orange { background: rgba(255, 159, 67, 0.2); color: #ff9f43; }
+        .btn-action { background: var(--primary); border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer; font-weight: 600; color: #000; display: inline-flex; align-items: center; gap: 8px; }
+        .btn-action:hover { background: #fff; }
 
-        /* --- KANBAN BOARD (DESIGN) --- */
-        .kanban-board { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; height: calc(100vh - 200px); }
-        .kanban-col { min-width: 300px; background: var(--bg-sidebar); border-radius: 12px; border: 1px solid var(--border); display: flex; flex-direction: column; }
-        .kanban-header { padding: 15px; border-bottom: 1px solid var(--border); font-weight: 700; display: flex; justify-content: space-between; }
-        .kanban-count { background: var(--bg-hover); padding: 2px 8px; border-radius: 10px; font-size: 0.8rem; }
-        .kanban-body { padding: 15px; flex: 1; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
-        
-        .task-card {
-            background: var(--bg-card); padding: 15px; border-radius: 8px; border: 1px solid var(--border);
-            cursor: grab; transition: 0.2s; box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        }
-        .task-card:hover { border-color: var(--primary); }
-        .task-tag { font-size: 0.7rem; padding: 2px 6px; border-radius: 4px; background: var(--primary-dim); color: var(--primary); display: inline-block; margin-bottom: 8px; }
-        .task-title { font-weight: 600; margin-bottom: 8px; font-size: 0.95rem; }
-        .task-meta { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); }
-        .task-img { width: 100%; height: 100px; object-fit: cover; border-radius: 4px; margin-bottom: 10px; background: #333; }
-
-        /* --- DATA TABLES --- */
-        .table-container { background: var(--bg-card); border-radius: var(--radius); border: 1px solid var(--border); overflow: hidden; margin-bottom: 30px; }
-        .data-table { width: 100%; border-collapse: collapse; }
-        .data-table th, .data-table td { padding: 15px 20px; text-align: left; border-bottom: 1px solid var(--border); }
-        .data-table th { background: var(--bg-sidebar); color: var(--text-muted); font-weight: 600; font-size: 0.85rem; text-transform: uppercase; }
-        .data-table tr:hover { background: var(--bg-hover); }
-        .data-table tr:last-child td { border-bottom: none; }
-        
-        .status-badge { padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; font-weight: 700; }
-        .st-success { background: rgba(0, 184, 148, 0.15); color: var(--success); }
-        .st-warning { background: rgba(253, 203, 110, 0.15); color: var(--warning); }
-        .st-danger { background: rgba(214, 48, 49, 0.15); color: var(--danger); }
-
-        /* --- SIMULATION MODAL (Advanced) --- */
-        .modal-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; justify-content: center; align-items: center; }
-        .modal-overlay.active { display: flex; }
-        .sim-box { width: 90vw; height: 85vh; background: #111; border: 1px solid #333; border-radius: 12px; display: flex; flex-direction: column; box-shadow: 0 0 50px rgba(0,0,0,0.5); }
-        
-        .sim-top { height: 60px; border-bottom: 1px solid #333; display: flex; justify-content: space-between; align-items: center; padding: 0 20px; background: #1a1a1a; }
-        .sim-content { flex: 1; display: flex; overflow: hidden; }
-        .sim-visual { flex: 2; background: #0d0d0d; position: relative; border-right: 1px solid #333; display: flex; justify-content: center; align-items: center; }
-        .sim-terminal { flex: 1; background: #080808; padding: 20px; font-family: var(--font-code); font-size: 0.85rem; color: #0f0; overflow-y: auto; }
-        
-        .node-flow { display: flex; gap: 40px; align-items: center; }
-        .flow-step { width: 120px; height: 120px; background: #222; border: 2px solid #444; border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; transition: 0.3s; opacity: 0.4; }
-        .flow-step.active { border-color: var(--primary); opacity: 1; transform: scale(1.1); box-shadow: 0 0 20px rgba(212, 175, 55, 0.2); }
-        .flow-icon { font-size: 2rem; margin-bottom: 10px; color: #fff; }
-        .flow-arrow { font-size: 1.5rem; color: #444; transition: 0.3s; }
-        .flow-arrow.active { color: var(--primary); }
-
-        /* --- NOTIFICATION TOASTS --- */
-        .toast-container { position: fixed; top: 80px; right: 20px; z-index: 2000; display: flex; flex-direction: column; gap: 10px; }
-        .toast { width: 300px; background: var(--bg-card); border-left: 4px solid var(--primary); padding: 15px; border-radius: 4px; box-shadow: var(--shadow); transform: translateX(120%); transition: 0.3s; display: flex; justify-content: space-between; }
-        .toast.show { transform: translateX(0); }
-        .toast-content h4 { font-size: 0.9rem; margin-bottom: 4px; }
-        .toast-content p { font-size: 0.8rem; color: var(--text-muted); }
-
-        /* --- SETTINGS PANEL --- */
-        .settings-panel { position: absolute; top: 70px; right: 30px; width: 250px; background: var(--bg-card); border: 1px solid var(--border); border-radius: 8px; padding: 15px; display: none; box-shadow: var(--shadow); z-index: 50; }
-        .settings-panel.active { display: block; }
-        .switch-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; font-size: 0.9rem; }
     </style>
 </head>
-<body id="body">
-
-    <div class="toast-container" id="toastContainer"></div>
+<body>
 
     <aside class="sidebar">
-        <div class="brand"><i class="fas fa-cube"></i> NetMarket OS <span style="font-size:0.7rem; background:var(--primary); color:#000; padding:2px 4px; border-radius:4px;">TITAN</span></div>
+        <div class="brand"><i class="fas fa-layer-group"></i> NetMarket <span style="font-size:0.6rem; border:1px solid var(--primary); padding:2px 4px; border-radius:4px; margin-left:5px;">TITAN v7</span></div>
         
-        <div class="nav-label">Dashboards</div>
-        <div class="nav-item active" onclick="switchView('home', this)"><i class="fas fa-th-large"></i> Vue d'ensemble</div>
-        <div class="nav-item" onclick="switchView('kpi', this)"><i class="fas fa-chart-line"></i> Analytics & KPIs</div>
+        <div class="nav-section">
+            <div class="nav-label">Entreprise</div>
+            <div class="nav-item active" onclick="nav('dashboard', this)"><i class="fas fa-chart-pie"></i> Dashboard</div>
+            <div class="nav-item" onclick="nav('corporate', this)"><i class="fas fa-building"></i> Contexte & Histoire</div>
+            <div class="nav-item" onclick="nav('team', this)"><i class="fas fa-users"></i> Équipe Projet</div>
+        </div>
 
-        <div class="nav-label">Modules Métiers</div>
-        <div class="nav-item" onclick="switchView('design', this)"><i class="fas fa-pencil-ruler"></i> NetDesignX</div>
-        <div class="nav-item" onclick="switchView('cat', this)"><i class="fas fa-tags"></i> NetCatX</div>
-        <div class="nav-item" onclick="switchView('promo', this)"><i class="fas fa-bullhorn"></i> NetPromoX</div>
-        <div class="nav-item" onclick="switchView('care', this)"><i class="fas fa-headset"></i> NetCareX</div>
+        <div class="nav-section">
+            <div class="nav-label">Solutions Métiers</div>
+            <div class="nav-item" onclick="nav('design', this)"><i class="fas fa-pencil-ruler"></i> NetDesignX</div>
+            <div class="nav-item" onclick="nav('cat', this)"><i class="fas fa-tags"></i> NetCatX</div>
+            <div class="nav-item" onclick="nav('promo', this)"><i class="fas fa-bullhorn"></i> NetMarkX</div>
+            <div class="nav-item" onclick="nav('care', this)"><i class="fas fa-headset"></i> NetCareX</div>
+        </div>
 
-        <div class="server-widget">
-            <div class="server-row"><span><i class="fas fa-server"></i> AWS EU-West-3</span> <span class="pulse" style="color:var(--success)">● Online</span></div>
-            
-            <div class="server-row" style="margin-top:10px;"><span>CPU Usage</span> <span id="cpuVal">12%</span></div>
-            <div class="server-bar-bg"><div class="server-bar-fill" id="cpuBar" style="width:12%"></div></div>
-            
-            <div class="server-row"><span>Memory</span> <span id="memVal">4.2GB</span></div>
-            <div class="server-bar-bg"><div class="server-bar-fill" id="memBar" style="width:40%; background:var(--info);"></div></div>
-            
-            <div class="server-row"><span>API Latency</span> <span>24ms</span></div>
+        <div style="margin-top:auto; padding:20px; font-size:0.8rem; color:#666; border-top:1px solid var(--border);">
+            <div><i class="fas fa-server"></i> System: Stable</div>
+            <div><i class="fas fa-clock"></i> <span id="clock">12:00</span></div>
         </div>
     </aside>
 
     <div class="main-wrapper">
-        <header class="topbar">
-            <div class="page-title">
-                <span id="pageTitle">Dashboard</span> 
-                <span class="live-badge">LIVE DATA</span>
+        <div class="top-bar">
+            <div style="font-size:0.9rem; color:var(--text-muted);" id="breadcrumbs">NetMarket / Dashboard</div>
+            <div style="display:flex; gap:15px; align-items:center;">
+                <div style="font-size:0.8rem;"><span style="color:var(--accent-green)">●</span> API Connectée</div>
+                <div style="width:35px; height:35px; background:var(--primary); border-radius:50%; display:flex; align-items:center; justify-content:center; color:#000; font-weight:700;">A</div>
             </div>
-            <div class="top-actions">
-                <button class="action-btn" onclick="toggleSettings()"><i class="fas fa-cog"></i></button>
-                <button class="action-btn" onclick="toggleNotifs()">
-                    <i class="fas fa-bell"></i>
-                    <span class="notif-badge active"></span>
-                </button>
-                <div class="action-btn" style="font-size:0.9rem; font-weight:600; color:var(--primary);">
-                    <i class="fas fa-user-circle"></i> Admin
-                </div>
-            </div>
-            
-            <div class="settings-panel" id="settingsPanel">
-                <h4 style="margin-bottom:15px; border-bottom:1px solid var(--border); padding-bottom:5px;">Configuration</h4>
-                <div class="switch-row">
-                    <span>Mode Clair/Sombre</span>
-                    <button onclick="document.body.classList.toggle('light-mode')" style="cursor:pointer; padding:2px 8px;">Switch</button>
-                </div>
-                <div class="switch-row">
-                    <span>Notifications</span>
-                    <span style="color:var(--success)">ON</span>
-                </div>
-                <div class="switch-row">
-                    <span>Version</span>
-                    <span style="color:var(--text-muted)">6.0.0</span>
-                </div>
-            </div>
-        </header>
+        </div>
 
-        <div class="content">
+        <div class="content-area">
 
-            <section id="home" class="view-section active">
-                <h2 style="margin-bottom:20px;">Performance Globale</h2>
-                <div class="grid-4">
-                    <div class="stat-card">
-                        <div class="stat-head">
-                            <div class="stat-icon"><i class="fas fa-shopping-cart"></i></div>
-                            <span class="trend up"><i class="fas fa-arrow-up"></i> +12%</span>
-                        </div>
-                        <div class="stat-val">124.5k€</div>
-                        <div class="stat-label">Chiffre d'affaires (Jour)</div>
+            <section id="dashboard" class="view-section active">
+                <h1 style="font-family:var(--font-head); margin-bottom:20px; color:white;">Vue d'Ensemble Performance</h1>
+                
+                <div class="grid-3">
+                    <div class="card">
+                        <div class="card-head"><span class="card-title">Chiffre d'Affaires (2024)</span><i class="fas fa-euro-sign" style="color:var(--primary)"></i></div>
+                        <div class="stat-val">11.1 Mds</div>
+                        <div style="color:var(--accent-green); font-size:0.9rem; margin-top:5px;"><i class="fas fa-arrow-up"></i> +7% vs 2023</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-head">
-                            <div class="stat-icon"><i class="fas fa-users"></i></div>
-                            <span class="trend up"><i class="fas fa-arrow-up"></i> +5%</span>
-                        </div>
-                        <div class="stat-val">4,203</div>
-                        <div class="stat-label">Visiteurs Actifs</div>
+                    <div class="card">
+                        <div class="card-head"><span class="card-title">Clients Actifs</span><i class="fas fa-user-friends" style="color:var(--accent-blue)"></i></div>
+                        <div class="stat-val">50 M</div>
+                        <div style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Europe</div>
                     </div>
-                    <div class="stat-card">
-                        <div class="stat-head">
-                            <div class="stat-icon"><i class="fas fa-box"></i></div>
-                            <span class="trend down"><i class="fas fa-arrow-down"></i> -2%</span>
-                        </div>
-                        <div class="stat-val">85</div>
-                        <div class="stat-label">Retours en attente</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-head">
-                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                            <span class="trend up">Stable</span>
-                        </div>
-                        <div class="stat-val">99.9%</div>
-                        <div class="stat-label">Uptime Système</div>
+                    <div class="card">
+                        <div class="card-head"><span class="card-title">Collaborateurs</span><i class="fas fa-id-badge" style="color:var(--accent-red)"></i></div>
+                        <div class="stat-val">18 000</div>
+                        <div style="color:var(--text-muted); font-size:0.9rem; margin-top:5px;">Répartis sur 4 pays</div>
                     </div>
                 </div>
 
-                <div class="grid-4" style="grid-template-columns: 2fr 1fr;">
-                    <div class="table-container">
-                        <div style="padding:15px; border-bottom:1px solid var(--border); font-weight:600;">Flux d'Activité Récent (Logs)</div>
-                        <table class="data-table">
-                            <thead><tr><th>Heure</th><th>Module</th><th>Action</th><th>Statut</th></tr></thead>
-                            <tbody id="activityLog">
-                                </tbody>
-                        </table>
-                    </div>
-                    <div class="table-container" style="padding:20px;">
-                        <h4 style="margin-bottom:15px;">Répartition Trafic</h4>
-                        <canvas id="trafficChart"></canvas>
-                    </div>
+                <div class="card" style="margin-bottom:20px;">
+                    <div class="card-head"><span class="card-title">Statut des Workflows n8n (Live)</span></div>
+                    <table class="data-table">
+                        <thead><tr><th>Département</th><th>Outil</th><th>Dernier Trigger</th><th>Statut</th><th>Action</th></tr></thead>
+                        <tbody>
+                            <tr><td>Design</td><td>NetDesignX</td><td>Il y a 2 min</td><td><span class="badge bg-green">Actif</span></td><td><button class="btn-action" style="padding:4px 8px; font-size:0.7rem;" onclick="nav('design', null)">Voir</button></td></tr>
+                            <tr><td>Catalogue</td><td>NetCatX</td><td>Il y a 5 sec</td><td><span class="badge bg-green">Sync</span></td><td><button class="btn-action" style="padding:4px 8px; font-size:0.7rem;" onclick="nav('cat', null)">Voir</button></td></tr>
+                            <tr><td>Marketing</td><td>NetMarkX</td><td>Il y a 10 min</td><td><span class="badge bg-green">Actif</span></td><td><button class="btn-action" style="padding:4px 8px; font-size:0.7rem;" onclick="nav('promo', null)">Voir</button></td></tr>
+                            <tr><td>Service Client</td><td>NetCareX</td><td>Temps réel</td><td><span class="badge bg-green">Actif</span></td><td><button class="btn-action" style="padding:4px 8px; font-size:0.7rem;" onclick="nav('care', null)">Voir</button></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <section id="corporate" class="view-section">
+                <div class="doc-section">
+                    <h1 class="doc-title">Introduction & Contexte</h1>
+                    <p class="doc-text">Dans le cadre de notre projet académique, nous avons conçu <strong>NetMarket</strong>, une entreprise inspirée de Zalando. Après des années de croissance, NetMarket (11.1 Mds € de CA) fait face à des limites organisationnelles. Ce diagnostic vise à proposer des solutions digitales (NetDesignX, NetCatX...) pour assurer la pérennité de l'entreprise.</p>
+                    
+                    <h2 class="doc-subtitle">Présentation de l'Entreprise</h2>
+                    <p class="doc-text">Créée en 2008, NetMarket est un leader du e-commerce mode. Siège à Yverdon-les-Bains. <br>
+                    <strong>Mission :</strong> Offrir une mode accessible et durable à 50 millions de clients.</p>
+                    <ul class="doc-list">
+                        <li><span class="doc-highlight">Croissance :</span> +7% par an.</li>
+                        <li><span class="doc-highlight">Logistique :</span> Entrepôts automatisés en Allemagne, France, Pologne.</li>
+                        <li><span class="doc-highlight">Innovation :</span> Hubs tech à Dublin et Lisbonne.</li>
+                    </ul>
+
+                    <h2 class="doc-subtitle">Marché & Enjeux</h2>
+                    <p class="doc-text">Le marché e-commerce européen (>150 Mds €) est hyper-concurrentiel (Amazon, ASOS). NetMarket se distingue par un catalogue de 3000 marques et une stratégie RSE forte (Seconde main, neutralité carbone 2030).</p>
+                </div>
+            </section>
+
+            <section id="team" class="view-section">
+                <h1 style="text-align:center; font-family:var(--font-head); margin-bottom:10px;">Structure Organisationnelle</h1>
+                <p style="text-align:center; color:var(--text-muted);">Organigramme fonctionnel du projet NetMarket</p>
+
+                <div class="tree">
+                    <ul>
+                        <li>
+                            <div class="member-card">
+                                <img src="https://ui-avatars.com/api/?name=Ali+Akbar&background=d4af37&color=000" class="member-img">
+                                <div class="member-name">AliAkbar Hosein</div>
+                                <div class="member-role">Chef de Projet / Coordination</div>
+                                <div class="member-tags">
+                                    <span class="tag">Supervision</span>
+                                </div>
+                            </div>
+                            <ul>
+                                <li>
+                                    <div class="member-card">
+                                        <img src="https://ui-avatars.com/api/?name=Sihem+Igoudjil&background=4dabf7&color=fff" class="member-img">
+                                        <div class="member-name">Sihem Igoudjil</div>
+                                        <div class="member-role">Responsable Fonctionnel</div>
+                                        <div class="member-tags">
+                                            <span class="tag">Business Analysis</span>
+                                            <span class="tag">Spécifications</span>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li>
+                                    <div class="member-card">
+                                        <img src="https://ui-avatars.com/api/?name=Lihan+Anne&background=ff6b6b&color=fff" class="member-img">
+                                        <div class="member-name">Lihan Anne Vanessa</div>
+                                        <div class="member-role">Responsable Design & UX</div>
+                                        <div class="member-tags">
+                                            <span class="tag">UI/UX</span>
+                                            <span class="tag">Frontend</span>
+                                            <span class="tag">Technique</span>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
                 </div>
             </section>
 
             <section id="design" class="view-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <h2>NetDesignX <span style="color:var(--text-muted); font-size:1rem;">| Collection Hiver 2025</span></h2>
-                    <button class="nav-item active" style="border:none;" onclick="openSim('design')"><i class="fas fa-play"></i> Simuler Workflow</button>
+                <div class="card-head">
+                    <h1 style="font-family:var(--font-head);">NetDesignX</h1>
+                    <button class="btn-action" onclick="launchSim('design')"><i class="fas fa-play"></i> Simuler Workflow n8n</button>
                 </div>
-                
-                <div class="kanban-board">
-                    <div class="kanban-col">
-                        <div class="kanban-header">
-                            <span>Idéation / Croquis</span>
-                            <span class="kanban-count">3</span>
-                        </div>
-                        <div class="kanban-body">
-                            <div class="task-card">
-                                <div class="task-tag">Tendance WGSN</div>
-                                <div class="task-title">Manteau Oversize Laine</div>
-                                <div class="task-meta"><span><i class="fas fa-paperclip"></i> 2</span> <span><i class="fas fa-comment"></i> 5</span></div>
-                            </div>
-                            <div class="task-card">
-                                <div class="task-tag">Retour Client</div>
-                                <div class="task-title">Robe Soie (Nouvelle couleur)</div>
-                                <div class="task-meta"><span><i class="fas fa-user"></i> Julie M.</span></div>
-                            </div>
-                            <div class="task-card">
-                                <div class="task-tag">Accessoire</div>
-                                <div class="task-title">Sac Cuir Vegan</div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="kanban-col">
-                        <div class="kanban-header">
-                            <span>Prototypage 3D (CLO)</span>
-                            <span class="kanban-count">2</span>
-                        </div>
-                        <div class="kanban-body">
-                            <div class="task-card">
-                                <div class="task-img" style="background:url('https://images.unsplash.com/photo-1544441893-675973e31985?auto=format&fit=crop&w=300&q=80') center/cover;"></div>
-                                <div class="task-tag">Vêtement</div>
-                                <div class="task-title">Blazer Hiver v2</div>
-                                <div class="task-meta"><span style="color:var(--warning)">En cours de rendu...</span></div>
-                            </div>
-                            <div class="task-card">
-                                <div class="task-tag">Sport</div>
-                                <div class="task-title">Legging Tech-Fit</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="kanban-col">
-                        <div class="kanban-header">
-                            <span>Validé (Prêt Catalogue)</span>
-                            <span class="kanban-count">1</span>
-                        </div>
-                        <div class="kanban-body">
-                            <div class="task-card" style="border-left:4px solid var(--success);">
-                                <div class="task-title">Sneakers Urban X</div>
-                                <div class="task-meta"><span style="color:var(--success)"><i class="fas fa-check"></i> Exporté NetCatX</span></div>
-                            </div>
-                        </div>
+                <div class="doc-section" style="max-width:100%; margin:0;">
+                    <p class="doc-text"><strong>Département Design & Collection :</strong> Responsable de la conception et de la cohérence stylistique. <br>
+                    <strong>Problème :</strong> Outils fragmentés (mails, PDF), erreurs de versions.<br>
+                    <strong>Solution NetDesignX :</strong> Centralisation via CLO 3D (prototypage), WGSN (tendances) et Monday.com (gestion).</p>
+                    <div style="display:flex; gap:10px; margin-top:20px;">
+                        <span class="doc-highlight">Stack: CLO 3D</span>
+                        <span class="doc-highlight">Stack: WGSN</span>
+                        <span class="doc-highlight">Stack: Monday</span>
                     </div>
                 </div>
             </section>
 
             <section id="cat" class="view-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <h2>NetCatX <span style="color:var(--text-muted); font-size:1rem;">| PIM & Diffusion</span></h2>
-                    <button class="nav-item active" style="border:none;" onclick="openSim('cat')"><i class="fas fa-play"></i> Simuler Flux</button>
+                <div class="card-head">
+                    <h1 style="font-family:var(--font-head);">NetCatX</h1>
+                    <button class="btn-action" onclick="launchSim('cat')"><i class="fas fa-play"></i> Simuler Workflow n8n</button>
                 </div>
-
-                <div class="grid-4">
-                    <div class="stat-card">
-                        <div class="stat-val">12,404</div>
-                        <div class="stat-label">Produits Totaux</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" style="color:var(--warning)">15</div>
-                        <div class="stat-label">Erreurs Synchro</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val" style="color:var(--success)">100%</div>
-                        <div class="stat-label">Couverture Photo</div>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead><tr><th>SKU</th><th>Nom Produit</th><th>Enrichissement IA</th><th>Canaux</th><th>Statut</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td>BST-2025</td>
-                                <td>Veste Hiver Premium</td>
-                                <td><span class="status-badge st-success">100% Complet</span></td>
-                                <td><i class="fab fa-shopify"></i> <i class="fab fa-amazon"></i></td>
-                                <td><span class="status-badge st-success">LIVE</span></td>
-                            </tr>
-                            <tr>
-                                <td>DRS-SUM-99</td>
-                                <td>Robe Été Florale</td>
-                                <td><span class="status-badge st-warning">80% (Desc manquante)</span></td>
-                                <td><i class="fab fa-shopify"></i></td>
-                                <td><span class="status-badge st-warning">DRAFT</span></td>
-                            </tr>
-                            <tr>
-                                <td>SHOE-RUN</td>
-                                <td>Sneakers Pro Run</td>
-                                <td><span class="status-badge st-success">100% Complet</span></td>
-                                <td><i class="fab fa-instagram"></i></td>
-                                <td><span class="status-badge st-success">LIVE</span></td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="doc-section" style="max-width:100%; margin:0;">
+                    <p class="doc-text"><strong>Département Catalogue / E-merchandising :</strong> Lien entre conception et vente. <br>
+                    <strong>Objectif :</strong> Garantir la fiabilité des données produits (PIM) et la diffusion multicanale.<br>
+                    <strong>Solution NetCatX :</strong> Intégration Akeneo (PIM), Salsify (Diffusion) et Shopify Plus.</p>
                 </div>
             </section>
 
             <section id="promo" class="view-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <h2>NetPromoX <span style="color:var(--text-muted); font-size:1rem;">| Marketing Automation</span></h2>
-                    <button class="nav-item active" style="border:none;" onclick="openSim('promo')"><i class="fas fa-play"></i> Simuler Campagne</button>
+                <div class="card-head">
+                    <h1 style="font-family:var(--font-head);">NetMarkX</h1>
+                    <button class="btn-action" onclick="launchSim('promo')"><i class="fas fa-play"></i> Simuler Workflow n8n</button>
                 </div>
-
-                <div class="table-container" style="padding:20px;">
-                    <canvas id="marketingChart" height="100"></canvas>
-                </div>
-
-                <div class="table-container">
-                    <table class="data-table">
-                        <thead><tr><th>Campagne</th><th>Canal</th><th>Audience</th><th>Budget</th><th>ROI</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td>Lancement Hiver</td>
-                                <td>Email + Instagram</td>
-                                <td>VIP (>200€)</td>
-                                <td>15k €</td>
-                                <td style="color:var(--success); font-weight:bold;">5.2x</td>
-                            </tr>
-                            <tr>
-                                <td>Relance Panier</td>
-                                <td>Email Auto</td>
-                                <td>Abandon < 24h</td>
-                                <td>2k €</td>
-                                <td style="color:var(--success); font-weight:bold;">12.0x</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div class="doc-section" style="max-width:100%; margin:0;">
+                    <p class="doc-text"><strong>Département Marketing :</strong> Acquisition et fidélisation. <br>
+                    <strong>Solution NetMarkX :</strong> Automatisation des campagnes via Klaviyo (CRM), Hootsuite (Social) et Google Analytics 4.</p>
                 </div>
             </section>
 
             <section id="care" class="view-section">
-                <div style="display:flex; justify-content:space-between; margin-bottom:20px;">
-                    <h2>NetCareX <span style="color:var(--text-muted); font-size:1rem;">| Customer Success</span></h2>
-                    <button class="nav-item active" style="border:none;" onclick="openSim('care')"><i class="fas fa-play"></i> Simuler Ticket</button>
+                <div class="card-head">
+                    <h1 style="font-family:var(--font-head);">NetCareX</h1>
+                    <button class="btn-action" onclick="launchSim('care')"><i class="fas fa-play"></i> Simuler Workflow n8n</button>
                 </div>
-
-                <div class="grid-4">
-                    <div class="stat-card">
-                        <div class="stat-val">24</div>
-                        <div class="stat-label">Tickets Ouverts</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val">1h 15m</div>
-                        <div class="stat-label">Temps Réponse</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-val">4.8/5</div>
-                        <div class="stat-label">CSAT Score</div>
-                    </div>
-                </div>
-
-                <div class="table-container">
-                    <div style="padding:15px; border-bottom:1px solid var(--border);">Inbox Unifiée (Zendesk Integration)</div>
-                    <table class="data-table">
-                        <thead><tr><th>Client</th><th>Sujet</th><th>Analyse IA</th><th>Priorité</th><th>Action</th></tr></thead>
-                        <tbody>
-                            <tr>
-                                <td>Julie M.</td>
-                                <td>Problème Taille</td>
-                                <td><span style="color:var(--danger)">Sentiment Négatif</span></td>
-                                <td><span class="status-badge st-danger">HAUTE</span></td>
-                                <td><button class="status-badge st-success" style="border:none; cursor:pointer;">Rembourser</button></td>
-                            </tr>
-                            <tr>
-                                <td>Marc D.</td>
-                                <td>Où est mon colis ?</td>
-                                <td><span style="color:var(--text-muted)">Neutre</span></td>
-                                <td><span class="status-badge st-warning">MOYENNE</span></td>
-                                <td><button class="status-badge st-warning" style="border:none; cursor:pointer;">Tracker</button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </section>
-
-             <section id="kpi" class="view-section">
-                <h2>Analytics Globaux</h2>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top:20px;">
-                     <div class="table-container" style="padding:20px;">
-                        <h4>Conversion Tunnel</h4>
-                        <canvas id="funnelChart"></canvas>
-                     </div>
-                     <div class="table-container" style="padding:20px;">
-                        <h4>Performance par Canal</h4>
-                        <canvas id="radarChart"></canvas>
-                     </div>
+                <div class="doc-section" style="max-width:100%; margin:0;">
+                    <p class="doc-text"><strong>Département Service Client :</strong> Gestion post-achat et satisfaction. <br>
+                    <strong>Solution NetCareX :</strong> Centralisation Zendesk, Chatbot IA (Tidio) et gestion des retours.</p>
                 </div>
             </section>
 
         </div>
     </div>
 
-    <div id="simModal" class="modal-overlay">
-        <div class="sim-box">
-            <div class="sim-top">
-                <div style="font-family:var(--font-code); color:var(--primary); font-size:1.2rem;">
-                    <i class="fas fa-terminal"></i> SIMULATION_ENGINE: <span id="simTitle">...</span>
-                </div>
-                <button onclick="closeSim()" style="background:none; border:none; color:white; font-size:1.5rem; cursor:pointer;">&times;</button>
+    <div id="simModal" class="sim-overlay">
+        <div class="sim-header">
+            <div style="font-family:var(--font-code); color:var(--primary); font-size:1.2rem;">
+                <i class="fas fa-terminal"></i> n8n_EXECUTION_ENGINE: <span id="simTitle">...</span>
             </div>
-            <div class="sim-content">
-                <div class="sim-visual" id="simVisual">
-                    </div>
-                <div class="sim-terminal" id="simTerminal">
-                    <div>> System Ready. Waiting for command...</div>
-                </div>
+            <button onclick="closeSim()" style="background:none; border:none; color:#fff; font-size:1.5rem; cursor:pointer;">&times;</button>
+        </div>
+        <div class="sim-body">
+            <div class="sim-view-left">
+                <img id="simImage" src="" class="workflow-img" alt="Workflow Diagram">
             </div>
-            <div style="padding:15px; background:#111; border-top:1px solid #333; text-align:center;">
-                <button class="nav-item active" style="display:inline-block; border:none;" onclick="runScenario()">
-                    <i class="fas fa-bolt"></i> EXECUTE SEQUENCE
-                </button>
+            <div class="sim-view-right">
+                <div style="padding:10px; border-bottom:1px solid #333; font-size:0.8rem; color:#666;">EVENT LOGS</div>
+                <div id="simConsole" class="console-out">
+                    <div>> System Ready. Waiting for trigger...</div>
+                </div>
+                <div style="padding:20px; border-top:1px solid #333; text-align:center;">
+                    <button class="btn-action" id="btnRun" onclick="runScenario()">Lancer Séquence</button>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CHARTS INIT ---
-        const ctxTraffic = document.getElementById('trafficChart').getContext('2d');
-        new Chart(ctxTraffic, {
-            type: 'doughnut',
-            data: {
-                labels: ['Mobile App', 'Desktop', 'Tablet'],
-                datasets: [{ data: [65, 30, 5], backgroundColor: ['#d4af37', '#6c5ce7', '#00b894'], borderWidth: 0 }]
-            },
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { position: 'right' } } }
-        });
-
-        const ctxMarketing = document.getElementById('marketingChart').getContext('2d');
-        new Chart(ctxMarketing, {
-            type: 'line',
-            data: {
-                labels: ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'],
-                datasets: [{ 
-                    label: 'Ventes (€)', 
-                    data: [12000, 19000, 15000, 25000, 22000, 30000, 35000],
-                    borderColor: '#d4af37', tension: 0.4 
-                }]
-            },
-            options: { responsive: true, maintainAspectRatio: false }
-        });
-
-        // --- NAVIGATION ---
-        function switchView(id, el) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            if(el) el.classList.add('active');
-            document.getElementById('pageTitle').innerText = id.charAt(0).toUpperCase() + id.slice(1);
-        }
-
-        function toggleSettings() {
-            const p = document.getElementById('settingsPanel');
-            p.classList.toggle('active');
-        }
-
-        // --- SERVER WIDGET ANIMATION ---
-        setInterval(() => {
-            const cpu = Math.floor(Math.random() * 30) + 10;
-            const mem = (Math.random() * 0.5 + 4).toFixed(1);
-            document.getElementById('cpuVal').innerText = cpu + '%';
-            document.getElementById('cpuBar').style.width = cpu + '%';
-            document.getElementById('memVal').innerText = mem + 'GB';
-        }, 2000);
-
-        // --- ACTIVITY LOG GENERATOR ---
-        const actions = [
-            { mod: 'NetCatX', act: 'Sync Shopify', stat: 'Success' },
-            { mod: 'NetCareX', act: 'New Ticket #884', stat: 'Pending' },
-            { mod: 'NetPromoX', act: 'Email Sent', stat: 'Success' },
-            { mod: 'NetDesignX', act: '3D Render', stat: 'Processing' }
-        ];
-        const logTable = document.getElementById('activityLog');
-        
-        function addLog() {
-            const action = actions[Math.floor(Math.random() * actions.length)];
-            const time = new Date().toLocaleTimeString();
-            const row = `<tr>
-                <td>${time}</td>
-                <td style="font-weight:600">${action.mod}</td>
-                <td>${action.act}</td>
-                <td><span class="status-badge st-${action.stat === 'Success' ? 'success' : 'warning'}">${action.stat}</span></td>
-            </tr>`;
-            logTable.insertAdjacentHTML('afterbegin', row);
-            if(logTable.rows.length > 5) logTable.deleteRow(5);
-        }
-        setInterval(addLog, 3500);
-
-        // --- NOTIFICATIONS SYSTEM ---
-        function showToast(title, msg) {
-            const container = document.getElementById('toastContainer');
-            const el = document.createElement('div');
-            el.className = 'toast';
-            el.innerHTML = `
-                <div class="toast-content">
-                    <h4>${title}</h4>
-                    <p>${msg}</p>
-                </div>
-                <i class="fas fa-times" style="cursor:pointer; color:#888;" onclick="this.parentElement.remove()"></i>
-            `;
-            container.appendChild(el);
-            setTimeout(() => el.classList.add('show'), 100);
-            setTimeout(() => { el.classList.remove('show'); setTimeout(() => el.remove(), 300); }, 5000);
-        }
-
-        // --- SIMULATION ENGINE ---
+        // --- 1. CONFIGURATION DATA ---
+        // Mapping between IDs and the Uploaded Image Filenames
         const scenarios = {
             'design': {
-                name: 'DESIGN_PIPELINE',
-                steps: [
-                    { icon: 'fa-globe', label: 'WGSN Trend' },
-                    { icon: 'fa-pencil-alt', label: 'Croquis' },
-                    { icon: 'fa-cube', label: 'CLO 3D' },
-                    { icon: 'fa-check', label: 'Validation' }
-                ],
+                title: 'DESIGN & COLLECTION (NetDesignX)',
+                img: 'image_87875e.jpg', // Workflow Design Image
                 logs: [
-                    "FETCH: Trend Data from API...",
-                    "IMPORT: Sketch_v1.pdf...",
-                    "RENDER: Generating 3D Mesh...",
-                    "SUCCESS: Asset exported to PIM."
+                    "TRIGGER: Webhook 'Collection_Validée' received.",
+                    "FETCH: Récupération fichiers 3D (CLO3D) & Tech Packs.",
+                    "CONDITION: Vérification complétude dossier (IF).",
+                    "ACTION: Normalisation des données (Code Node).",
+                    "UPLOAD: Stockage Drive/Sharepoint.",
+                    "APPROVAL: Demande validation Chef de Produit.",
+                    "DECISION: Validé. Push vers Akeneo PIM.",
+                    "SUCCESS: Handoff Catalogue terminé."
                 ]
             },
             'cat': {
-                name: 'CATALOGUE_SYNC',
-                steps: [
-                    { icon: 'fa-database', label: 'ERP' },
-                    { icon: 'fa-magic', label: 'Enrichment AI' },
-                    { icon: 'fa-tags', label: 'PIM' },
-                    { icon: 'fab fa-shopify', label: 'Storefront' }
-                ],
+                title: 'CATALOGUE & E-MERCH (NetCatX)',
+                img: 'image_878765.jpg', // Workflow Catalogue Image
                 logs: [
-                    "WATCH: New SKU detected...",
-                    "AI: Writing description...",
-                    "UPDATE: Akeneo PIM fields...",
-                    "PUSH: Shopify API (200 OK)."
+                    "TRIGGER: Nouveau fichier CSV Fournisseur détecté.",
+                    "PROCESS: Mapping champs -> Modèle NetMarket.",
+                    "VALIDATION: Champs obligatoires présents ?",
+                    "CODE: Normalisation Tailles (EU/US) & Couleurs.",
+                    "CHECK: Détection doublons (IF Exists).",
+                    "AKENEO: Création produit / Update attributs.",
+                    "SHOPIFY: Publication via API Admin.",
+                    "LOG: Mise à jour Google Sheet Reporting."
                 ]
             },
             'promo': {
-                name: 'MARKETING_AUTO',
-                steps: [
-                    { icon: 'fa-user-tag', label: 'Segment VIP' },
-                    { icon: 'fa-envelope-open-text', label: 'Gen Email' },
-                    { icon: 'fa-paper-plane', label: 'Send Grid' },
-                    { icon: 'fa-chart-pie', label: 'Analytics' }
-                ],
+                title: 'MARKETING & COM (NetMarkX)',
+                img: 'image_878a0b.jpg', // Workflow Marketing Image
                 logs: [
-                    "QUERY: Users where spent > 500...",
-                    "GENERATE: Personal offer...",
-                    "SEND: 15,000 emails queued...",
-                    "TRACK: Campaign active."
+                    "TRIGGER: Webhook 'Nouvelle Collection Publiée'.",
+                    "SEGMENT: Filtrage Clients VIP / Nouveaux.",
+                    "ENRICH: Récupération données GA4 / CRM.",
+                    "KLAVIYO: Déclenchement Flow Emailing personnalisé.",
+                    "SOCIAL: Planification posts (Hootsuite API).",
+                    "KPI: Tracking Taux d'ouverture & ROI.",
+                    "ALERT: Notification équipe si ROI < Seuil."
                 ]
             },
             'care': {
-                name: 'TICKET_ROUTING',
-                steps: [
-                    { icon: 'fa-envelope', label: 'Email In' },
-                    { icon: 'fa-brain', label: 'NLP Analyze' },
-                    { icon: 'fa-random', label: 'Routing' },
-                    { icon: 'fa-reply', label: 'Auto Reply' }
-                ],
+                title: 'SERVICE CLIENT (NetCareX)',
+                img: 'image_878a26.jpg', // Workflow Care Image
                 logs: [
-                    "WEBHOOK: New Ticket #994...",
-                    "AI: Sentiment NEGATIVE...",
-                    "ROUTE: High Priority Queue...",
-                    "ACTION: Refund Initiated."
+                    "TRIGGER: Webhook Zendesk (Nouveau Ticket).",
+                    "CLASSIFY: Analyse IA (Catégorie: Retour/Taille).",
+                    "LOOKUP: Récupération commande Shopify.",
+                    "RULE: Délai retour < 30j ? (OUI).",
+                    "ACTION: Génération étiquette retour.",
+                    "UPDATE: Mise à jour ticket & Notification Logistique.",
+                    "FEEDBACK: Envoi enquête satisfaction (CSAT)."
                 ]
             }
         };
 
-        let currentSim = null;
+        let currentScenario = null;
 
-        function openSim(key) {
-            currentSim = scenarios[key];
-            document.getElementById('simTitle').innerText = currentSim.name;
-            document.getElementById('modal').classList.add('active');
+        // --- 2. NAVIGATION LOGIC ---
+        function nav(id, el) {
+            // Hide all sections
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            // Remove active class from navs
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             
-            // Draw Visual Nodes
-            const vis = document.getElementById('simVisual');
-            vis.innerHTML = `<div class="node-flow">
-                ${currentSim.steps.map((s, i) => `
-                    <div class="flow-step" id="step-${i}">
-                        <div class="flow-icon"><i class="fas ${s.icon}"></i></div>
-                        <div style="font-size:0.8rem; font-weight:600; color:#fff;">${s.label}</div>
-                    </div>
-                    ${i < 3 ? `<div class="flow-arrow" id="arr-${i}"><i class="fas fa-chevron-right"></i></div>` : ''}
-                `).join('')}
-            </div>`;
+            // Show target
+            document.getElementById(id).classList.add('active');
+            if(el) el.classList.add('active');
             
-            document.getElementById('simTerminal').innerHTML = `<div>> Ready. Click Execute.</div>`;
+            // Breadcrumbs
+            document.getElementById('breadcrumbs').innerText = "NetMarket / " + id.charAt(0).toUpperCase() + id.slice(1);
+        }
+
+        // --- 3. SIMULATION LOGIC ---
+        function launchSim(key) {
+            currentScenario = scenarios[key];
+            document.getElementById('simTitle').innerText = currentScenario.title;
+            
+            // Set Image with Fallback
+            const imgEl = document.getElementById('simImage');
+            imgEl.src = currentScenario.img;
+            imgEl.onerror = function() { 
+                // Fallback text if image missing locally
+                this.style.display='none'; 
+                this.parentElement.innerHTML = '<div style="color:white;text-align:center">Image non trouvée.<br>Veuillez placer le fichier <em>'+currentScenario.img+'</em> dans le dossier.</div>'; 
+            };
+            
+            // Reset Console
+            document.getElementById('simConsole').innerHTML = '<div>> System Ready. Waiting for trigger...</div>';
+            document.getElementById('btnRun').disabled = false;
+            document.getElementById('btnRun').innerText = "Lancer Séquence";
+
+            document.getElementById('simModal').classList.add('active');
         }
 
         function closeSim() {
-            document.getElementById('modal').classList.remove('active');
+            document.getElementById('simModal').classList.remove('active');
         }
 
         function runScenario() {
-            const term = document.getElementById('simTerminal');
-            term.innerHTML = '';
-            
-            currentSim.logs.forEach((log, i) => {
+            const btn = document.getElementById('btnRun');
+            btn.disabled = true;
+            btn.innerText = "Exécution...";
+            const consoleDiv = document.getElementById('simConsole');
+            consoleDiv.innerHTML = '';
+
+            let delay = 0;
+            currentScenario.logs.forEach((log, index) => {
+                delay += 1200; // 1.2s delay
                 setTimeout(() => {
-                    // Log
-                    term.innerHTML += `<div style="margin-bottom:5px; color:#0f0;">> ${log}</div>`;
-                    
-                    // Visual
-                    document.querySelectorAll('.flow-step').forEach(s => s.classList.remove('active'));
-                    document.getElementById(`step-${i}`).classList.add('active');
-                    
-                    if(i > 0) document.getElementById(`arr-${i-1}`).classList.add('active');
-                    
-                    // Toast on finish
-                    if(i === currentSim.logs.length -1) {
-                        showToast('Succès', 'Workflow exécuté avec succès.');
+                    const line = document.createElement('div');
+                    line.className = 'console-line highlight';
+                    line.innerText = `> ${log}`;
+                    consoleDiv.appendChild(line);
+                    consoleDiv.scrollTop = consoleDiv.scrollHeight;
+
+                    if(index === currentScenario.logs.length - 1) {
+                        setTimeout(() => {
+                            btn.disabled = false;
+                            btn.innerText = "Relancer";
+                            const finish = document.createElement('div');
+                            finish.style.color = 'var(--accent-green)';
+                            finish.style.marginTop = '10px';
+                            finish.innerText = ">>> WORKFLOW FINISHED SUCCESSFULLY.";
+                            consoleDiv.appendChild(finish);
+                            consoleDiv.scrollTop = consoleDiv.scrollHeight;
+                        }, 500);
                     }
-                }, i * 1500);
+                }, delay);
             });
         }
+
+        // --- 4. CLOCK ---
+        setInterval(() => {
+            const now = new Date();
+            document.getElementById('clock').innerText = now.toLocaleTimeString('fr-FR', {hour:'2-digit', minute:'2-digit'});
+        }, 1000);
+
     </script>
 </body>
 </html>
